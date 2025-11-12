@@ -92,4 +92,30 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
+
+    // ============================================================
+    // 📍 MÉTODO PARA REINICIAR ESTADOS TRAS UN RESPAWN
+    // ============================================================
+    public void OnRespawn()
+    {
+        // Reiniciar inputs y movimiento vertical
+        moveInput = Vector2.zero;
+        velocity = Vector3.zero;
+        jumpPressed = false;
+
+        // Reiniciar animaciones si hay un Animator
+        if (anim != null)
+        {
+            anim.SetFloat("Speed", 0f);
+            anim.SetBool("isJumping", false);
+        }
+
+        // Asegurar que el CharacterController esté en estado estable
+        if (controller != null)
+        {
+            controller.Move(Vector3.zero);
+        }
+
+        Debug.Log("🔄 PlayerMovement reiniciado tras respawn.");
+    }
 }
