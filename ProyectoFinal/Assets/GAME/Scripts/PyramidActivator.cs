@@ -2,45 +2,69 @@
 
 public class PyramidActivator : MonoBehaviour
 {
-    [Header("Referencia al material o luz")]
-    public Renderer pyramidRenderer;        // arrastra aquí el MeshRenderer del teleporter
-    public Light pyramidLight;              // opcional: una luz para resplandor
-    public Color lockedColor = Color.gray;
-    public Color unlockedColor = Color.yellow;
+    [Header("Referencias visuales")]
+    public Renderer pyramidRenderer;       // arrastra el MeshRenderer de la pirámide o portal
+    public Light pyramidLight;             // opcional: luz para el resplandor
 
-    [Header("Partículas al activarse")]
-    public ParticleSystem activationEffect;
+    [Header("Colores de estado")]
+    public Color lockedColor = Color.gray;
+    public Color unlockedColor = new Color(1f, 0.85f, 0.3f); // dorado cálido
+
+    [Header("Efectos al activarse")]
+    public ParticleSystem activationEffect; // partículas tipo brillo o energía
+    public AudioSource activationSound;     // sonido opcional al activarse
+
+    [Header("Transición visual")]
+    public float colorTransitionSpeed = 2f; // velocidad del cambio de color
 
     private bool isActive = false;
+    private Color currentColor;
 
     private void Start()
     {
-        // Inicialmente, la pirámide está bloqueada visualmente
+        // Inicialmente bloqueada
+        currentColor = lockedColor;
         UpdateVisual(false);
     }
 
     private void Update()
     {
-        // Si ya está activa, no hacer nada
         if (isActive) return;
 
-        // Revisar si los dos minijuegos están completos
+        // Si los dos minijuegos están completos, activar la pirámide
         if (GameProgress.AreAllMiniGamesDone())
         {
             ActivatePyramid();
+        }
+
+        // Suavizar color de transición visual
+        if (pyramidRenderer != null)
+        {
+            pyramidRenderer.material.color = Color.Lerp(
+                pyramidRenderer.material.color,
+                currentColor,
+                Time.deltaTime * colorTransitionSpeed
+            );
         }
     }
 
     public void ActivatePyramid()
     {
         isActive = true;
-
-        // Cambiar el color o material
+        currentColor = unlockedColor;
         UpdateVisual(true);
 
-        // Efecto visual opcional
+        // 💥 Efectos visuales
         if (activationEffect != null)
             activationEffect.Play();
+
+        // 🔊 Sonido de activación
+        if (activationSound != null)
+            activationSound.Play();
+
+        // 💬 Mensaje en pantalla
+        if (UIMessageManager.Instance != null)
+            UIMessageManager.Instance.ShowMessage("🔔 ¡La pirámide ha sido activada!");
 
         Debug.Log("✨ Pirámide desbloqueada y activada visualmente.");
     }
@@ -56,6 +80,7 @@ public class PyramidActivator : MonoBehaviour
         {
             pyramidLight.enabled = unlocked;
             pyramidLight.color = unlocked ? unlockedColor : lockedColor;
+            pyramidLight.intensity = unlocked ? 4f : 0f;
         }
     }
 }
