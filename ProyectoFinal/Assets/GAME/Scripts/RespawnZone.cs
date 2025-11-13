@@ -12,11 +12,13 @@ public class RespawnTrigger : MonoBehaviour
     [Tooltip("Pequeño delay para reactivar movimiento (en segundos)")]
     public float respawnDelay = 0.2f;
 
+    [Header("Efectos visuales")]
+    [Tooltip("Prefab de partículas que se reproducen al reaparecer en el Hub")]
+    public GameObject respawnEffect;
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag(playerTag)) return;
-
-        // Inicia la rutina de respawn
         StartCoroutine(HandleRespawnRoutine(other.gameObject));
     }
 
@@ -27,30 +29,32 @@ public class RespawnTrigger : MonoBehaviour
         CharacterController cc = player.GetComponent<CharacterController>();
         var playerMovement = player.GetComponent<PlayerMovement>();
 
-        // 1️⃣ Desactivar el CharacterController antes de mover al jugador
         if (cc != null) cc.enabled = false;
 
-        // 2️⃣ Teletransportar al hub
+        // 1️⃣ Teletransportar al Hub
         GameProgress.TeleportToHub(player);
 
-        // 3️⃣ Ajustar posición un poco por encima del suelo para evitar solapamiento
+        // 2️⃣ Ajustar posición un poco por encima del suelo
         player.transform.position += Vector3.up * respawnYOffset;
 
-        // 4️⃣ Esperar un pequeño delay para que Unity actualice colisiones
+        // 🌀 Instanciar partículas de respawn
+        if (respawnEffect != null)
+        {
+            GameObject fx = Instantiate(respawnEffect, player.transform.position, Quaternion.identity);
+            Destroy(fx, 3f);
+        }
+
+        // 3️⃣ Esperar un pequeño delay
         yield return new WaitForSeconds(respawnDelay);
 
-        // 5️⃣ Reactivar el CharacterController y forzar un pequeño movimiento nulo
         if (cc != null)
         {
             cc.enabled = true;
             cc.Move(Vector3.zero);
         }
 
-        // 6️⃣ Reiniciar estados del movimiento (resetea inputs, gravedad, animaciones)
         if (playerMovement != null)
-        {
             playerMovement.OnRespawn();
-        }
 
         Debug.Log("✨ Respawn completado. Jugador puede moverse nuevamente.");
     }
