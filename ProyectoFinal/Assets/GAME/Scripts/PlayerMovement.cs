@@ -9,8 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float rotationSpeed = 720f;
 
     [Header("Jump Settings")]
-    [SerializeField] private float jumpHeight = 2.0f;   // altura del salto
-    [SerializeField] private float gravity = -9.81f;    // gravedad
+    [SerializeField] private float jumpHeight = 2.0f;
+    [SerializeField] private float gravity = -9.81f;
 
     [Header("References")]
     public Camera mainCamera;
@@ -27,11 +27,12 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+
         if (mainCamera == null)
             mainCamera = Camera.main;
     }
 
-    // ✅ Input System callbacks
+    // Input System
     public void OnMove(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
@@ -39,83 +40,87 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) // solo cuando se presiona
+        if (ctx.performed)
             jumpPressed = true;
     }
 
     private void Update()
     {
-        // Verificar si está tocando el suelo
+        // Detectar suelo
         isGrounded = controller.isGrounded;
 
-        // Reiniciar velocidad vertical si está en el suelo
         if (isGrounded && velocity.y < 0)
+        {
             velocity.y = -2f;
 
-        // Calcular dirección de movimiento (relativa a cámara)
+            // 🔥 caer al suelo termina animación
+            if (anim != null)
+                anim.SetBool("isJumping", false);
+        }
+
+        // Dirección segun cámara
         Vector3 moveDir = Vector3.zero;
+
         if (mainCamera != null)
         {
-            Vector3 camForward = mainCamera.transform.forward;
-            camForward.y = 0f;
-            camForward.Normalize();
+            Vector3 forward = mainCamera.transform.forward;
+            forward.y = 0f;
+            forward.Normalize();
 
-            Vector3 camRight = mainCamera.transform.right;
-            camRight.y = 0f;
-            camRight.Normalize();
+            Vector3 right = mainCamera.transform.right;
+            right.y = 0f;
+            right.Normalize();
 
-            moveDir = camRight * moveInput.x + camForward * moveInput.y;
-        }
-        else
-        {
-            moveDir = new Vector3(moveInput.x, 0f, moveInput.y);
+            moveDir = right * moveInput.x + forward * moveInput.y;
         }
 
-        // Rotar hacia donde se mueve
+        // Rotación hacia el movimiento
         if (moveDir.sqrMagnitude > 0.05f)
         {
             Quaternion targetRot = Quaternion.LookRotation(moveDir, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
 
-        // Mover horizontalmente
+        // Movimiento horizontal
         controller.Move(moveDir.normalized * moveSpeed * Time.deltaTime);
 
-        // Salto
+        // ========================
+        // 🔥 SALTO
+        // ========================
         if (jumpPressed && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             jumpPressed = false;
+
+            // activar animación de salto
+            if (anim != null)
+                anim.SetBool("isJumping", true);
         }
 
-        // Aplicar gravedad
+        // Gravedad
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        // ========================
+        // 🔥 ANIMACIÓN "Speed"
+        // ========================
+        float animSpeed = new Vector3(moveDir.x, 0, moveDir.z).magnitude;
+        anim.SetFloat("Speed", animSpeed);
     }
 
-    // ============================================================
-    // 📍 MÉTODO PARA REINICIAR ESTADOS TRAS UN RESPAWN
-    // ============================================================
+    // Respawn
     public void OnRespawn()
     {
-        // Reiniciar inputs y movimiento vertical
         moveInput = Vector2.zero;
         velocity = Vector3.zero;
         jumpPressed = false;
 
-        // Reiniciar animaciones si hay un Animator
         if (anim != null)
         {
             anim.SetFloat("Speed", 0f);
             anim.SetBool("isJumping", false);
         }
 
-        // Asegurar que el CharacterController esté en estado estable
-        if (controller != null)
-        {
-            controller.Move(Vector3.zero);
-        }
-
-        Debug.Log("🔄 PlayerMovement reiniciado tras respawn.");
+        controller.Move(Vector3.zero);
     }
 }
