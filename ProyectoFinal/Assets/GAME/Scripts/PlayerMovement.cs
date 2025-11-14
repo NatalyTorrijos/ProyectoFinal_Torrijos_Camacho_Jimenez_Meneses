@@ -18,6 +18,9 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private Animator anim;
 
+    //Para poder escalar 
+    public bool canMove = true;   
+
     private Vector2 moveInput;
     private Vector3 velocity;
     private bool isGrounded;
@@ -32,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
             mainCamera = Camera.main;
     }
 
-    // Input System
+ 
     public void OnMove(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
@@ -53,12 +56,19 @@ public class PlayerMovement : MonoBehaviour
         {
             velocity.y = -2f;
 
-            // 🔥 caer al suelo termina animación
             if (anim != null)
                 anim.SetBool("isJumping", false);
         }
 
-        // Dirección segun cámara
+      
+        if (!canMove)
+        {
+            velocity.y += gravity * Time.deltaTime;
+            controller.Move(velocity * Time.deltaTime);
+            return;
+        }
+
+        
         Vector3 moveDir = Vector3.zero;
 
         if (mainCamera != null)
@@ -74,25 +84,22 @@ public class PlayerMovement : MonoBehaviour
             moveDir = right * moveInput.x + forward * moveInput.y;
         }
 
-        // Rotación hacia el movimiento
+       
         if (moveDir.sqrMagnitude > 0.05f)
         {
             Quaternion targetRot = Quaternion.LookRotation(moveDir, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
 
-        // Movimiento horizontal
+      
         controller.Move(moveDir.normalized * moveSpeed * Time.deltaTime);
 
-        // ========================
-        // 🔥 SALTO
-        // ========================
+        // SALTO
         if (jumpPressed && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             jumpPressed = false;
 
-            // activar animación de salto
             if (anim != null)
                 anim.SetBool("isJumping", true);
         }
@@ -101,14 +108,12 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-        // ========================
-        // 🔥 ANIMACIÓN "Speed"
-        // ========================
+    
         float animSpeed = new Vector3(moveDir.x, 0, moveDir.z).magnitude;
         anim.SetFloat("Speed", animSpeed);
     }
 
-    // Respawn
+
     public void OnRespawn()
     {
         moveInput = Vector2.zero;
