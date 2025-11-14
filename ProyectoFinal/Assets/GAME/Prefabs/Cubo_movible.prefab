@@ -100,7 +100,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9156406343380642417}
   serializedVersion: 5
-  m_Mass: 50
+  m_Mass: 30
   m_LinearDamping: 5
   m_AngularDamping: 5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PushableBlock
   moveAxis: 1
-  slideSpeed: 1.5
+  slideSpeed: 4
   stopSmoothness: 5
 --- !u!65 &8378708064254871005
 BoxCollider:

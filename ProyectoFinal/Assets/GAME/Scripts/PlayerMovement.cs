@@ -18,6 +18,9 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private Animator anim;
 
+    // Para escalar
+    public bool canMove = true;
+
     private Vector2 moveInput;
     private Vector3 velocity;
     private bool isGrounded;
@@ -32,7 +35,9 @@ public class PlayerMovement : MonoBehaviour
             mainCamera = Camera.main;
     }
 
-    // Input System
+    // ===========================
+    // INPUT SYSTEM
+    // ===========================
     public void OnMove(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
@@ -53,12 +58,20 @@ public class PlayerMovement : MonoBehaviour
         {
             velocity.y = -2f;
 
-            // 🔥 caer al suelo termina animación
             if (anim != null)
                 anim.SetBool("isJumping", false);
         }
 
-        // Dirección segun cámara
+        // Si NO puede moverse (por escalar u otra mecánica)
+        if (!canMove)
+        {
+            velocity.y += gravity * Time.deltaTime;
+            controller.Move(velocity * Time.deltaTime);
+            anim.SetFloat("Speed", 0f);
+            return;
+        }
+
+        // Dirección según cámara
         Vector3 moveDir = Vector3.zero;
 
         if (mainCamera != null)
@@ -74,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
             moveDir = right * moveInput.x + forward * moveInput.y;
         }
 
-        // Rotación hacia el movimiento
+        // Rotación hacia donde se mueve
         if (moveDir.sqrMagnitude > 0.05f)
         {
             Quaternion targetRot = Quaternion.LookRotation(moveDir, Vector3.up);
@@ -84,15 +97,12 @@ public class PlayerMovement : MonoBehaviour
         // Movimiento horizontal
         controller.Move(moveDir.normalized * moveSpeed * Time.deltaTime);
 
-        // ========================
-        // 🔥 SALTO
-        // ========================
+        // SALTO
         if (jumpPressed && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             jumpPressed = false;
 
-            // activar animación de salto
             if (anim != null)
                 anim.SetBool("isJumping", true);
         }
@@ -101,14 +111,38 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-        // ========================
-        // 🔥 ANIMACIÓN "Speed"
-        // ========================
+        // ANIMACIÓN SPEED
         float animSpeed = new Vector3(moveDir.x, 0, moveDir.z).magnitude;
         anim.SetFloat("Speed", animSpeed);
     }
 
-    // Respawn
+    // ===============================================
+    // 🔥 EMPUJE DE BLOQUES (PushableBlock)
+    // ===============================================
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        PushableBlock pushable = hit.collider.GetComponent<PushableBlock>();
+        if (pushable == null) return;
+
+        if (moveInput.sqrMagnitude < 0.1f) return;
+
+        Vector3 camForward = mainCamera.transform.forward;
+        camForward.y = 0f;
+        camForward.Normalize();
+
+        Vector3 camRight = mainCamera.transform.right;
+        camRight.y = 0f;
+        camRight.Normalize();
+
+        Vector3 pushDir = (camRight * moveInput.x + camForward * moveInput.y).normalized;
+        pushDir.y = 0f;
+
+        pushable.Push(pushDir);
+    }
+
+    // ===========================
+    // RESPAWN
+    // ===========================
     public void OnRespawn()
     {
         moveInput = Vector2.zero;
