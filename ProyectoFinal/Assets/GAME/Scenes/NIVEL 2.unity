@@ -27353,7 +27353,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -1675.624, y: -1108.746}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &259661826
@@ -156112,7 +156112,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 51f2041cbb72aaa41bb80c4bcbdbab5b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.48
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 51f2041cbb72aaa41bb80c4bcbdbab5b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -188789,7 +188789,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bc9d7c7a5e3fdd6479b2135493fec343, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.21
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bc9d7c7a5e3fdd6479b2135493fec343, type: 3}
       propertyPath: m_LocalPosition.z
@@ -188881,8 +188881,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
@@ -188905,10 +188905,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.21811676
-  m_Height: 2.2087288
+  m_Radius: 2
+  m_Height: 0.35
   m_Direction: 1
-  m_Center: {x: 0, y: 1.0438712, z: 0.04965973}
+  m_Center: {x: 0, y: 11, z: 0}
 --- !u!114 &1754213673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203228,7 +203228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5704468082851067701, guid: af46110109c3a034b920c3d59e1bbea0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.16
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5704468082851067701, guid: af46110109c3a034b920c3d59e1bbea0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -211114,7 +211114,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ef8139dabb308264ca2c6500dfbfab6b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.39
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ef8139dabb308264ca2c6500dfbfab6b, type: 3}
       propertyPath: m_LocalPosition.z
