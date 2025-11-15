@@ -20,9 +20,9 @@ public class Enemigo : MonoBehaviour
 
         float dist = Vector3.Distance(transform.position, player.position);
 
-        // --------------------
-        // ATAQUE
-        // --------------------
+        
+        // ----------------------------ATAQUE
+        
         if (dist <= attackRange)
         {
             animator.SetBool("RunBool", false);
@@ -32,12 +32,12 @@ public class Enemigo : MonoBehaviour
             return;
         }
 
-        // --------------------
-        // PERSEGUIR
-        // --------------------
+
+        // ----------------------------PERSEGUIR
+
         if (dist <= detectionRange)
         {
-            // Mirar al jugador
+            
             Vector3 lookDir = player.position - transform.position;
             lookDir.y = 0;
             transform.rotation = Quaternion.Slerp(
@@ -46,7 +46,7 @@ public class Enemigo : MonoBehaviour
                 10f * Time.deltaTime
             );
 
-            // Mover hacia el jugador
+            
             Vector3 direccion = (player.position - transform.position).normalized;
             Vector3 destino = player.position - direccion * 0.6f;
 
@@ -60,9 +60,9 @@ public class Enemigo : MonoBehaviour
             animator.SetBool("IdleBool", false);
         }
 
-        // --------------------
-        // IDLE
-        // --------------------
+
+        // ----------------------------IDLE
+
         else
         {
             animator.SetBool("RunBool", false);
