@@ -188921,7 +188921,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2617d49ec4fd84f40be9c2a153ff0e4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemigo
-  player: {fileID: 0}
+  player: {fileID: 880484806}
   detectionRange: 10
   attackRange: 1
   moveSpeed: 2
