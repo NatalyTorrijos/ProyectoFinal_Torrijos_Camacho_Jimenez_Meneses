@@ -1,7 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class NpcSpeak_Paquito : MonoBehaviour
 {
+    [Header("Paneles del NPC")]
     public GameObject PanelPaquito;
     public GameObject Panel_PressE;
 
@@ -24,6 +25,11 @@ public class NpcSpeak_Paquito : MonoBehaviour
         {
             PanelPaquito.SetActive(true);
             Panel_PressE.SetActive(false);
+        }
+
+        if (!playerInRange)
+        {
+            PanelPaquito.SetActive(false);
         }
     }
 

@@ -29,7 +29,6 @@ public class ItemManager : MonoBehaviour
             Debug.Log("Objeto recogido: Fishing_Rod");
         }
 
-        
         if (bagCollected && fishingRodCollected)
         {
             merlin.ActivarSiguienteDialogo();
