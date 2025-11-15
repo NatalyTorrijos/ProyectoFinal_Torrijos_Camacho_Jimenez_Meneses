@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    [Header("ID del objeto")]
-    public string itemID;  // Bag_3, Fishing_Rod
-
+    
+    public string itemID; 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

@@ -29,7 +29,6 @@ public class ItemManager : MonoBehaviour
             Debug.Log("Objeto recogido: Fishing_Rod");
         }
 
-        // Si ya tiene los 2 objetos → activar diálogo especial
         if (bagCollected && fishingRodCollected)
         {
             merlin.ActivarSiguienteDialogo();

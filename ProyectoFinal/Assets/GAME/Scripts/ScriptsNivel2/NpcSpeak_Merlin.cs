@@ -3,13 +3,11 @@
 public class NpcSpeak_Merlin : MonoBehaviour
 {
     [Header("Paneles del NPC")]
-    public GameObject PanelMerlin1;  // Primer diálogo
-    public GameObject PanelMerlin2;  // Segundo diálogo
+    public GameObject PanelMerlin1;
+    public GameObject PanelMerlin2;
     public GameObject Panel_PressE;
 
     private bool playerInRange = false;
-
-    // Se activa desde ItemManager cuando el jugador recolecta ambos objetos
     private bool dialogoFinalDisponible = false;
 
     void Start()
@@ -72,7 +70,6 @@ public class NpcSpeak_Merlin : MonoBehaviour
         }
     }
 
-    // Llamado por ItemManager cuando el jugador tiene ambos objetos
     public void ActivarSiguienteDialogo()
     {
         dialogoFinalDisponible = true;
