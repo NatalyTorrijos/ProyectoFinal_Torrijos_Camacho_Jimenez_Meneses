@@ -2,7 +2,17 @@
 
 public class RotatingPiece : MonoBehaviour
 {
+    public enum RotationAxis
+    {
+        X,
+        Y,
+        Z,
+        Custom
+    }
+
     [Header("Configuración de Rotación")]
+    public RotationAxis rotationAxis = RotationAxis.Y;
+    public Vector3 customAxis = Vector3.up; // usado solo si RotationAxis.Custom
     public float rotationAmount = 90f;
     public float correctAngle = 0f;
     public float angleTolerance = 3f;
@@ -43,88 +53,93 @@ public class RotatingPiece : MonoBehaviour
 
     private void Update()
     {
-        // --- NO INTERACTÚA SI YA ES CORRECTA ---
         if (isCorrect)
         {
             pieceRenderer.material.color = completedColor;
             return;
         }
 
-        // --- EFECTO DE PARPADEO PERMANENTE ---
         float t = (Mathf.Sin(Time.time * pulseSpeed) + 1) * 0.5f;
-        Color c = Color.Lerp(baseColor, pulseColor, t * pulseIntensity);
-        pieceRenderer.material.color = c;
+        pieceRenderer.material.color =
+            Color.Lerp(baseColor, pulseColor, t * pulseIntensity);
 
-        // --- VERIFICAR DISTANCIA ---
         if (player != null)
         {
             float dist = Vector3.Distance(transform.position, player.position);
             playerInRange = dist <= interactDistance;
         }
-        else playerInRange = false;
 
         if (playerInRange && showUIHint)
-        {
             UIMessageManager.Instance.ShowMessage("Presiona E para girar");
-        }
 
-        // --- INTERACCIÓN (MULTIPLES PRESIONES DE E SIN SALIR) ---
         if (playerInRange && Input.GetKeyDown(interactKey))
-        {
             RotatePiece();
-        }
     }
 
-    // ============================================================
-    //       🔄 ROTAR PIEZA Y VALIDAR SI ES CORRECTA
-    // ============================================================
+    // -----------------------------------------
+    // ROTAR EN EL EJE SELECCIONADO
+    // -----------------------------------------
+    private Vector3 GetRotationVector()
+    {
+        switch (rotationAxis)
+        {
+            case RotationAxis.X: return Vector3.right;
+            case RotationAxis.Y: return Vector3.up;
+            case RotationAxis.Z: return Vector3.forward;
+            case RotationAxis.Custom: return customAxis.normalized;
+        }
+        return Vector3.up;
+    }
+
     public void RotatePiece()
     {
         if (isCorrect) return;
 
-        transform.Rotate(Vector3.up * rotationAmount);
+        Vector3 axis = GetRotationVector();
+        transform.Rotate(axis * rotationAmount);
 
-        if (CheckCorrect())
+        if (CheckCorrect(axis))
         {
             isCorrect = true;
-
-            // Mensaje de correcto
             UIMessageManager.Instance.ShowMessage("CORRECTO!");
-
-            // Cambiar color a verde (ya no parpadea)
             pieceRenderer.material.color = completedColor;
-
-            // Avisar al puzzle manager
             puzzleManager?.CheckPuzzleState();
         }
     }
 
-    // ============================================================
-    //       🧠 VALIDAR ANGULO CORRECTO
-    // ============================================================
-    private bool CheckCorrect()
+    // -----------------------------------------
+    // VALIDAR ÁNGULO EN EL EJE CORRECTO
+    // -----------------------------------------
+    private bool CheckCorrect(Vector3 axis)
     {
-        float y = transform.eulerAngles.y % 360f;
-        float target = correctAngle % 360f;
+        float current;
 
-        float diff = Mathf.DeltaAngle(y, target);
+        if (rotationAxis == RotationAxis.X)
+            current = transform.eulerAngles.x;
+        else if (rotationAxis == RotationAxis.Y)
+            current = transform.eulerAngles.y;
+        else if (rotationAxis == RotationAxis.Z)
+            current = transform.eulerAngles.z;
+        else
+        {
+            // custom axis → usar proyección
+            current = Vector3.Dot(transform.eulerAngles, axis.normalized);
+        }
+
+        float diff = Mathf.DeltaAngle(current % 360f, correctAngle % 360f);
         return Mathf.Abs(diff) <= angleTolerance;
     }
 
-    public bool IsCorrect()
-    {
-        return isCorrect;
-    }
+    public bool IsCorrect() => isCorrect;
 
-    // Para rotaciones por código desde otro script
     public void RotateSteps(int steps)
     {
         if (isCorrect || steps == 0) return;
 
-        float amount = rotationAmount * steps;
-        transform.Rotate(Vector3.up * amount);
+        Vector3 axis = GetRotationVector();
+        transform.Rotate(axis * rotationAmount * steps);
 
-        if (CheckCorrect())
+        if (CheckCorrect(axis))
         {
             isCorrect = true;
             UIMessageManager.Instance.ShowMessage("CORRECTO!");
