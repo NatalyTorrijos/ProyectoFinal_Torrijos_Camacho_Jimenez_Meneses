@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem; // ✅ necesario para el nuevo sistema
+using UnityEngine.InputSystem;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
@@ -18,13 +18,11 @@ public class ThirdPersonCamera : MonoBehaviour
     private Vector3 currentRotation;
     private Vector3 rotationSmoothVelocity;
 
-    // ✅ Mapeo de acciones del nuevo Input System
     private PlayerInput playerInput;
     private InputAction lookAction;
 
     private void Start()
     {
-        // Buscar el jugador automáticamente
         if (target == null)
         {
             GameObject playerObj = GameObject.FindWithTag("Player");
@@ -32,11 +30,9 @@ public class ThirdPersonCamera : MonoBehaviour
                 target = playerObj.transform;
         }
 
-        // Buscar o crear PlayerInput (necesario para usar acciones)
         playerInput = FindAnyObjectByType<PlayerInput>();
         if (playerInput != null)
         {
-            // Intentar obtener la acción "Look" si existe
             if (playerInput.actions.FindAction("Look") != null)
                 lookAction = playerInput.actions.FindAction("Look");
         }
@@ -49,7 +45,6 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         if (!target) return;
 
-        // 🔹 Leer input del nuevo sistema
         Vector2 lookInput = Vector2.zero;
 
         if (lookAction != null)
@@ -58,23 +53,19 @@ public class ThirdPersonCamera : MonoBehaviour
         }
         else if (Mouse.current != null)
         {
-            // En caso de no tener acción "Look", usa movimiento físico del mouse
             lookInput.x = Mouse.current.delta.x.ReadValue();
             lookInput.y = Mouse.current.delta.y.ReadValue();
         }
 
-        // Rotación de cámara
         yaw += lookInput.x * mouseSensitivity * Time.deltaTime;
         pitch -= lookInput.y * mouseSensitivity * Time.deltaTime;
         pitch = Mathf.Clamp(pitch, pitchLimits.x, pitchLimits.y);
 
-        // Suavizado de rotación
         Vector3 targetRotation = new Vector3(pitch, yaw);
         currentRotation = Vector3.SmoothDamp(currentRotation, targetRotation, ref rotationSmoothVelocity, rotationSmoothTime);
 
         transform.eulerAngles = currentRotation;
 
-        // Posición de la cámara detrás del jugador
         Vector3 focusPoint = target.position + Vector3.up * height;
         Vector3 targetPosition = focusPoint - transform.forward * distance;
         transform.position = targetPosition;
