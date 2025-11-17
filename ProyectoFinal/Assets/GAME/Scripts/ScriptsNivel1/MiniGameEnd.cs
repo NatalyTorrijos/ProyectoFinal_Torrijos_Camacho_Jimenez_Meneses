@@ -31,9 +31,9 @@ public class MiniGameEnd : MonoBehaviour
         if (UIMessageManager.Instance != null)
         {
             if (GameProgress.AreAllMiniGamesDone())
-                UIMessageManager.Instance.ShowMessage("🔔 ¡HAS ACTIVADO LA PIRÁMIDE PRINCIPAL!");
+                UIMessageManager.Instance.ShowMessage("¡HAS ACTIVADO LA PIRÁMIDE PRINCIPAL!");
             else
-                UIMessageManager.Instance.ShowMessage("🎯 MINIJUEGO COMPLETADO. REGRESA AL HUB PARA CONTINUAR.");
+                UIMessageManager.Instance.ShowMessage("MINIJUEGO COMPLETADO. VE A LA PIRAMIDE.");
         }
 
         // 4️⃣ Teletransportar al jugador al Hub

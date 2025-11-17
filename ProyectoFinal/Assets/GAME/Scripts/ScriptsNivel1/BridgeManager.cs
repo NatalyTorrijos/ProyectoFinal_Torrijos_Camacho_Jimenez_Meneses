@@ -34,7 +34,7 @@ public class BridgeManager : MonoBehaviour
         if (AreBothPortalsActive())
         {
             bridgeObject.SetActive(true);
-            Debug.Log("✨ ¡Puente activado!");
+            Debug.Log("¡PUENTE ACTIVADO!");
         }
     }
 }

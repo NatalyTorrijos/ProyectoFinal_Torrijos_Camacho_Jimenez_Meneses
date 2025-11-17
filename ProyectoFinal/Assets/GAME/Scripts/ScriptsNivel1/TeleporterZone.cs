@@ -28,8 +28,8 @@ public class TeleporterZone : MonoBehaviour
         if (requireCompletion && !GameProgress.AreAllMiniGamesDone())
         {
             if (UIMessageManager.Instance != null)
-                UIMessageManager.Instance.ShowMessage("⚠️ Te falta un minijuego para acceder a la pirámide");
-            Debug.Log("⚠️ La pirámide aún está bloqueada.");
+                UIMessageManager.Instance.ShowMessage("TE FALTA UN MINIJUEGO PARA ACCEDER A LA PIRÁMIDE");
+            Debug.Log("LA PIRÁMIDE AÚN ESTÁ BLOQUEADA");
             return;
         }
 

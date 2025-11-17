@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using System.Collections;
 
@@ -9,23 +9,22 @@ public class UIMessageManager : MonoBehaviour
     [Header("Referencia al texto de mensaje")]
     public TextMeshProUGUI messageText;
 
-    [Header("Duraci�n del mensaje (segundos)")]
-    public float messageDuration = 3f;
+    [Header("Duración por defecto")]
+    public float defaultDuration = 2f;
 
-    [Header("Velocidad del fade")]
+    [Header("Fade")]
     public float fadeSpeed = 2f;
 
     private Coroutine currentRoutine;
+    private bool priorityActive = false;
 
     private void Awake()
     {
-        // Singleton simple
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
 
-        // Asegurar que el texto est� vac�o y transparente al inicio
         if (messageText != null)
         {
             messageText.text = "";
@@ -33,15 +32,53 @@ public class UIMessageManager : MonoBehaviour
         }
     }
 
+    // ======================================================
+    // 🔥 RESTAURADO → COMPATIBILIDAD CON SCRIPTS ANTIGUOS
+    // ======================================================
     public void ShowMessage(string msg)
     {
+        // No interrumpe mensajes prioritarios
+        if (priorityActive) return;
+
         if (currentRoutine != null)
             StopCoroutine(currentRoutine);
 
-        currentRoutine = StartCoroutine(ShowMessageRoutine(msg));
+        currentRoutine = StartCoroutine(ShowRoutine(msg, defaultDuration));
     }
 
-    private IEnumerator ShowMessageRoutine(string msg)
+    // ======================================================
+    // 🔥 Hint (presiona E) → se muestra siempre pero suave
+    // ======================================================
+    public void ShowHint(string msg)
+    {
+        if (priorityActive) return; // no interfiere con prioridad
+
+        if (currentRoutine != null)
+            StopCoroutine(currentRoutine);
+
+        currentRoutine = StartCoroutine(ShowRoutine(msg, defaultDuration));
+    }
+
+    // ======================================================
+    // 🔥 Mensajes importantes → NO se interrumpen
+    // ======================================================
+    public void ShowPriority(string msg, float duration)
+    {
+        priorityActive = true;
+
+        if (currentRoutine != null)
+            StopCoroutine(currentRoutine);
+
+        currentRoutine = StartCoroutine(ShowRoutine(msg, duration, () =>
+        {
+            priorityActive = false;
+        }));
+    }
+
+    // ======================================================
+    // 🔥 Rutina compartida (fade + duración)
+    // ======================================================
+    private IEnumerator ShowRoutine(string msg, float duration, System.Action onFinish = null)
     {
         if (messageText == null) yield break;
 
@@ -54,8 +91,7 @@ public class UIMessageManager : MonoBehaviour
             yield return null;
         }
 
-        // Mantener visible
-        yield return new WaitForSeconds(messageDuration);
+        yield return new WaitForSeconds(duration);
 
         // Fade OUT
         while (messageText.alpha > 0)
@@ -65,5 +101,20 @@ public class UIMessageManager : MonoBehaviour
         }
 
         messageText.text = "";
+
+        onFinish?.Invoke();
+    }
+
+    // ======================================================
+    // 🔥 Limpieza manual
+    // ======================================================
+    public void ClearMessage()
+    {
+        if (currentRoutine != null)
+            StopCoroutine(currentRoutine);
+
+        messageText.text = "";
+        messageText.alpha = 0;
+        priorityActive = false;
     }
 }

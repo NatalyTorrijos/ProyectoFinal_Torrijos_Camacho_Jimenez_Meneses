@@ -3,13 +3,11 @@
 public class NpcSpeak_Merlin : MonoBehaviour
 {
     [Header("Paneles del NPC")]
-    public GameObject PanelMerlin1;  
-    public GameObject PanelMerlin2;  
+    public GameObject PanelMerlin1;
+    public GameObject PanelMerlin2;
     public GameObject Panel_PressE;
 
     private bool playerInRange = false;
-
-    
     private bool dialogoFinalDisponible = false;
 
     void Start()
@@ -72,7 +70,6 @@ public class NpcSpeak_Merlin : MonoBehaviour
         }
     }
 
-    
     public void ActivarSiguienteDialogo()
     {
         dialogoFinalDisponible = true;

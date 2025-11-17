@@ -64,7 +64,7 @@ public class PyramidActivator : MonoBehaviour
 
         // 💬 Mensaje en pantalla
         if (UIMessageManager.Instance != null)
-            UIMessageManager.Instance.ShowMessage("🔔 ¡La pirámide ha sido activada!");
+            UIMessageManager.Instance.ShowMessage("¡LA PIRÁMIDE HA SIDO ACTIVADA!");
 
         Debug.Log("✨ Pirámide desbloqueada y activada visualmente.");
     }
