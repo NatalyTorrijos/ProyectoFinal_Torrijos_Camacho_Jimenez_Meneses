@@ -12,7 +12,7 @@ public class LadderClimb : MonoBehaviour
     private PlayerMovement playerMovement;
     private Animator anim;
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -22,18 +22,20 @@ public class LadderClimb : MonoBehaviour
             playerMovement = other.GetComponentInChildren<PlayerMovement>();
             anim = other.GetComponentInChildren<Animator>();
 
-            Debug.Log("Entró al trigger, controller: " + (controller != null));
+            // Mostrar instrucciones inmediatamente
+            SceneController.Instance.EnqueueInstruction(
+                "Presiona E para subir la escalera.\nCuando llegues arriba, salta o presiona E para salir."
+            );
         }
     }
 
-    void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             playerInside = false;
             climbing = false;
 
-           
             if (playerMovement != null)
                 playerMovement.canMove = true;
 
@@ -45,15 +47,17 @@ public class LadderClimb : MonoBehaviour
                 anim.speed = 1f;
             }
 
+            // Ocultar instrucciones al salir del trigger
+            SceneController.Instance.HideInstruction();
+
             Debug.Log("Salió del trigger. Escalar OFF");
         }
     }
 
-    void Update()
+    private void Update()
     {
         if (!playerInside) return;
 
-        
         bool pressedE = (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
                         || Input.GetKeyDown(KeyCode.E);
 
@@ -64,7 +68,6 @@ public class LadderClimb : MonoBehaviour
             if (playerMovement != null)
                 playerMovement.canMove = !climbing;
 
-          
             if (anim != null)
                 anim.SetBool("IsClimbing", climbing);
 
@@ -73,7 +76,6 @@ public class LadderClimb : MonoBehaviour
 
         if (!climbing || controller == null) return;
 
-        
         float vertical = 0f;
 
         if (Keyboard.current != null)
@@ -84,24 +86,16 @@ public class LadderClimb : MonoBehaviour
         }
         else
         {
-           
             float rawV = Input.GetAxisRaw("Vertical");
             if (rawV > 0.1f) vertical = 1f;
             else if (rawV < -0.1f) vertical = -1f;
             else vertical = 0f;
         }
 
-        
         if (anim != null)
-        {
             anim.SetFloat("ClimbSpeed", vertical);
-        }
 
-    
         Vector3 move = Vector3.up * vertical * climbSpeed;
         controller.Move(move * Time.deltaTime);
     }
 }
-
-
-
