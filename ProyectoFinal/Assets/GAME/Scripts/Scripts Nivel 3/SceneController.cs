@@ -1,35 +1,54 @@
 ﻿using UnityEngine;
+using TMPro;
+using System.Collections.Generic;
 
 public class SceneController : MonoBehaviour
 {
-    public GameObject[] prismPrefabs;      // 1 prisma por orden
-    public Transform[] prismSpawnPoints;   // dónde aparece cada prisma
+    public static SceneController Instance;
 
-    public GameObject keyPrefab;           // llave final
-    public Transform keySpawnPoint;        // lugar de la llave
+    public GameObject instructionPanel;
+    public TextMeshProUGUI instructionText;
 
-    void Start()
+    private Queue<string> messageQueue = new Queue<string>();
+    private bool showingMessage = false;
+
+    private void Awake()
     {
-        SpawnNextPrism();
+        Instance = this;
+        instructionPanel.SetActive(false);
     }
 
-    public void SpawnNextPrism()
+    public void EnqueueInstruction(string msg)
     {
-        int count = GameManager.Instance.GetCollectedCount();
+        messageQueue.Enqueue(msg);
 
-        // Si faltan prismas → instanciar el siguiente
-        if (count < prismPrefabs.Length)
+        // Si no se está mostrando un mensaje → mostrar el siguiente
+        if (!showingMessage)
+            ShowNextMessage();
+    }
+
+    private void ShowNextMessage()
+    {
+        if (messageQueue.Count == 0)
         {
-            Instantiate(prismPrefabs[count],
-                        prismSpawnPoints[count].position,
-                        Quaternion.identity);
+            instructionPanel.SetActive(false);
+            showingMessage = false;
+            return;
         }
-        else
-        {
-            // Si ya recogiste todos → spawnear la llave
-            Instantiate(keyPrefab, keySpawnPoint.position, Quaternion.identity);
-            Debug.Log("¡Llave generada!");
-        }
+
+        showingMessage = true;
+
+        string nextMsg = messageQueue.Dequeue();
+        instructionText.text = nextMsg;
+        instructionPanel.SetActive(true);
+    }
+
+    public void HideInstruction()
+    {
+        instructionPanel.SetActive(false);
+        showingMessage = false;
+
+        // Mostrar el siguiente mensaje en la cola
+        ShowNextMessage();
     }
 }
-
