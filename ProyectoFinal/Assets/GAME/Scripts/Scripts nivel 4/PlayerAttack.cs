@@ -2,17 +2,15 @@
 
 public class PlayerAttack : MonoBehaviour
 {
-    [Header("Attack Settings")]
     public float attackDamage = 20f;
     public float attackRange = 2f;
     public float attackCooldown = 0.6f;
 
-    [Header("References")]
-    public Transform attackPoint;   // mano del jugador
-    public LayerMask bossLayer;     // layer del boss
+    public Transform attackPoint; 
+    public LayerMask bossLayer;
 
-    private Animator anim;
     private float nextAttackTime = 0f;
+    private Animator anim;
 
     void Start()
     {
@@ -21,41 +19,39 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        if (Time.time < nextAttackTime)
-            return;
+        if (Time.time < nextAttackTime) return;
 
         if (Input.GetMouseButtonDown(0))
         {
-            PerformAttack();
+            DoAttack();
         }
     }
 
-    void PerformAttack()
+    void DoAttack()
     {
         nextAttackTime = Time.time + attackCooldown;
 
         if (anim != null)
             anim.SetTrigger("Attack");
 
-        Debug.Log("🗡 Player intentó atacar");
+        Collider[] hits = Physics.OverlapSphere(attackPoint.position, attackRange, bossLayer);
 
-        Collider[] detected = Physics.OverlapSphere(attackPoint.position, attackRange, bossLayer);
-
-        foreach (Collider c in detected)
+        foreach (Collider hit in hits)
         {
-            var boss = c.GetComponent<BossStats>();
-            if (boss != null)
+            BossHealth bossHP = hit.GetComponentInParent<BossHealth>();
+
+            if (bossHP != null)
             {
-                boss.TakeDamage(attackDamage);
-                Debug.Log("💥 Boss recibió daño");
+                bossHP.TakeDamage(attackDamage);
+                Debug.Log("Le hiciste daño al Boss, nueva vida: " + bossHP.currentHealth);
             }
         }
     }
 
-    // Solo para visualizar en escena
     void OnDrawGizmosSelected()
     {
         if (attackPoint == null) return;
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }

@@ -23,8 +23,7 @@ public class BossStats : MonoBehaviour
     void Die()
     {
         Debug.Log(" Boss murió");
-        // aquí puedes llamar animación de muerte
-        // GetComponent<Animator>().SetTrigger("Die");
-        Destroy(gameObject, 2f); // opcional
+  
+        Destroy(gameObject, 2f); 
     }
 }
