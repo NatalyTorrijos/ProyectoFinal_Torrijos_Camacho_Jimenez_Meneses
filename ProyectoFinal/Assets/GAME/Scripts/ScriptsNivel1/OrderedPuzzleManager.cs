@@ -30,7 +30,7 @@ public class OrderedPuzzleManager : MonoBehaviour
         // NO ES EL QUE SIGUE
         if (index != currentIndex)
         {
-            UIMessageManager.Instance.ShowPriority("ESE NO ES EL ORDEN CORRECTO", 2f);
+            UIMessageManager.Instance.ShowPriority("INTENTA CON OTRO PILAR PRIMERO", 2f);
             return;
         }
 
