@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using TMPro;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
@@ -18,13 +20,26 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private Animator anim;
 
-    // Para escalar
     public bool canMove = true;
 
     private Vector2 moveInput;
     private Vector3 velocity;
     private bool isGrounded;
     private bool jumpPressed;
+
+    // ===========================================================
+    // 🔥 SISTEMA DE VIDA DEL PLAYER
+    // ===========================================================
+    [Header("----- PLAYER HEALTH -----")]
+    public float maxHealth = 100f;
+    public float currentHealth;
+
+    [Header("----- UI -----")]
+    public Image healthFill;
+    public CanvasGroup damageFlash;
+    public TextMeshProUGUI hpText;
+
+    bool isDead = false;
 
     private void Awake()
     {
@@ -33,6 +48,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (mainCamera == null)
             mainCamera = Camera.main;
+
+        currentHealth = maxHealth;
+
+        if (healthFill != null)
+            healthFill.fillAmount = 1f;
+
+        if (hpText != null)
+            hpText.text = maxHealth.ToString();
     }
 
     // ===========================
@@ -51,7 +74,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // Detectar suelo
+        if (isDead) return;
+
         isGrounded = controller.isGrounded;
 
         if (isGrounded && velocity.y < 0)
@@ -62,7 +86,6 @@ public class PlayerMovement : MonoBehaviour
                 anim.SetBool("isJumping", false);
         }
 
-        // Si NO puede moverse (por escalar u otra mecánica)
         if (!canMove)
         {
             velocity.y += gravity * Time.deltaTime;
@@ -71,7 +94,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // Dirección según cámara
         Vector3 moveDir = Vector3.zero;
 
         if (mainCamera != null)
@@ -87,17 +109,14 @@ public class PlayerMovement : MonoBehaviour
             moveDir = right * moveInput.x + forward * moveInput.y;
         }
 
-        // Rotación hacia donde se mueve
         if (moveDir.sqrMagnitude > 0.05f)
         {
             Quaternion targetRot = Quaternion.LookRotation(moveDir, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
 
-        // Movimiento horizontal
         controller.Move(moveDir.normalized * moveSpeed * Time.deltaTime);
 
-        // SALTO
         if (jumpPressed && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -107,20 +126,25 @@ public class PlayerMovement : MonoBehaviour
                 anim.SetBool("isJumping", true);
         }
 
-        // Gravedad
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-        // ANIMACIÓN SPEED
         float animSpeed = new Vector3(moveDir.x, 0, moveDir.z).magnitude;
         anim.SetFloat("Speed", animSpeed);
     }
 
-    // ===============================================
-    // 🔥 EMPUJE DE BLOQUES (PushableBlock)
-    // ===============================================
+    // ===========================================================
+    // 🔥 EMPUJE DE BLOQUES
+    // ===========================================================
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        Plataforma p = hit.collider.GetComponent<Plataforma>();
+
+        if (p != null)
+        {
+            p.TocarPlataforma();
+        }
+
         PushableBlock pushable = hit.collider.GetComponent<PushableBlock>();
         if (pushable == null) return;
 
@@ -140,6 +164,51 @@ public class PlayerMovement : MonoBehaviour
         pushable.Push(pushDir);
     }
 
+    // ===========================================================
+    // RECIBIR DAÑO DEL JEFE
+    // ===========================================================
+    public void TakeDamage(float amount)
+    {
+        if (isDead) return;
+
+        currentHealth -= amount;
+        if (currentHealth < 0) currentHealth = 0;
+
+        if (healthFill != null)
+            healthFill.fillAmount = currentHealth / maxHealth;
+
+        if (hpText != null)
+            hpText.text = currentHealth.ToString();
+
+        if (damageFlash != null)
+            StartCoroutine(FlashDamage());
+
+        if (anim != null)
+            anim.SetTrigger("Hit");
+
+        if (currentHealth <= 0)
+            Die();
+    }
+
+    System.Collections.IEnumerator FlashDamage()
+    {
+        damageFlash.alpha = 1f;
+        yield return new WaitForSeconds(0.15f);
+        damageFlash.alpha = 0f;
+    }
+
+    void Die()
+    {
+        isDead = true;
+        canMove = false;
+
+        if (anim != null)
+        {
+            anim.SetFloat("Speed", 0f);
+            anim.SetTrigger("Die");
+        }
+    }
+
     // ===========================
     // RESPAWN
     // ===========================
@@ -157,4 +226,6 @@ public class PlayerMovement : MonoBehaviour
 
         controller.Move(Vector3.zero);
     }
+
+   
 }

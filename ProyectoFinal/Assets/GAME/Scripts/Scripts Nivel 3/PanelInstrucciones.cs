@@ -1,24 +1,30 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-public class PanelTrigger : MonoBehaviour
+public class OpenPanelOnClick : MonoBehaviour
 {
-    public GameObject panelUI;   // El panel del Canvas que quieres activar
+    public GameObject panelMecanicas;
+    Camera cam;
 
-    private void OnTriggerEnter(Collider other)
+    void Start()
     {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Jugador entró en el trigger → Abrir panel");
-            panelUI.SetActive(true);
-        }
+        cam = Camera.main;
+        panelMecanicas.SetActive(false);
     }
 
-    private void OnTriggerExit(Collider other)
+    void Update()
     {
-        if (other.CompareTag("Player"))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Jugador salió del trigger → Cerrar panel");
-            panelUI.SetActive(false);
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.gameObject == this.gameObject)
+                {
+                    panelMecanicas.SetActive(true);
+                }
+            }
         }
     }
 }
