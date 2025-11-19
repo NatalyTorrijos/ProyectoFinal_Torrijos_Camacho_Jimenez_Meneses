@@ -32,9 +32,7 @@ public class LevelTimer : MonoBehaviour
 
         currentTime -= Time.deltaTime;
 
-        // ============================
-        //   🔥 MODO ADVERTENCIA
-        // ============================
+        // Modo advertencia
         if (!warningMode && currentTime <= 120f)
         {
             warningMode = true;
@@ -77,5 +75,18 @@ public class LevelTimer : MonoBehaviour
     {
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.buildIndex);
+    }
+
+    // ------------------------------------
+    // MÉTODOS NUEVOS PARA GUARDAR TIEMPO
+    // ------------------------------------
+    public float GetElapsedTime()
+    {
+        return totalTime - currentTime;
+    }
+
+    public float GetRemainingTime()
+    {
+        return currentTime;
     }
 }
