@@ -4,10 +4,12 @@ public class Collectible : MonoBehaviour
 {
 
     [Header("Efectos de Recolección")]
-    public ParticleSystem collectParticles;      // <-- Asigna aquí tu sistema de partículas
-    // public AudioClip collectSound;            // <-- (Opcional) sonido de recolección
+    public ParticleSystem collectParticles;      
+    public AudioClip collectSound;            
     public enum Tipo { Prisma, Llave }
     public Tipo tipo = Tipo.Prisma;
+
+    public int checkpointIndex = 0;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -17,25 +19,29 @@ public class Collectible : MonoBehaviour
             {
                 ParticleSystem p = Instantiate(collectParticles, transform.position, Quaternion.identity);
                 p.Play();
-                Destroy(p.gameObject, 2f); // Se elimina después del efecto
+                Destroy(p.gameObject, 2f); 
             }
 
-            // reproducir sonido
-            // AudioSource.PlayClipAtPoint(collectSound, transform.position);
+           
+             AudioSource.PlayClipAtPoint(collectSound, transform.position);
 
-            // Llamar al controlador para spawnear el siguiente
-            CollectibleController.Instance.SpawnNextCollectible();
+          
+           
             if (tipo == Tipo.Prisma)
             {
-                SceneController.Instance.RegistrarPrisma();
                 CollectibleController.Instance.SpawnNextCollectible();
+                SceneController.Instance.RegistrarPrisma();
+                other.GetComponent<PlayerFallReset>().SetCheckpoint(checkpointIndex);
+
             }
             else if (tipo == Tipo.Llave)
             {
                 SceneController.Instance.RegistrarLlave();
+                other.GetComponent<PlayerFallReset>().SetCheckpoint(checkpointIndex);
             }
 
-            // Destruir este objeto
+            
+
             Destroy(gameObject);
         }
     }
