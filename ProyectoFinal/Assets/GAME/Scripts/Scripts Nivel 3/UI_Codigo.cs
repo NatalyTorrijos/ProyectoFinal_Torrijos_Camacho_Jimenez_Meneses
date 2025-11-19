@@ -13,7 +13,7 @@ public class UI_Codigo : MonoBehaviour
     public TextMeshProUGUI textoError;
 
     [Header("Código Correcto")]
-    public string codigoCorrecto = "1234";
+    public string codigoCorrecto = "7";
 
     [Header("Control del Jugador")]
     public MonoBehaviour movimientoJugador;
@@ -71,12 +71,12 @@ public class UI_Codigo : MonoBehaviour
     {
         if (campoCodigo.text == codigoCorrecto)
         {
-            textoError.text = "✔ Código correcto";
+            textoError.text = "Código correcto";
             PasarSiguienteNivel();
         }
         else
         {
-            textoError.text = "✖ Código incorrecto";
+            textoError.text = "Código incorrecto";
         }
     }
 

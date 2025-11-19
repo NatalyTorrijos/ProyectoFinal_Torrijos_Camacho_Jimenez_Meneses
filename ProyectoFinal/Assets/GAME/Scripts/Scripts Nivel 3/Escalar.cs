@@ -30,7 +30,7 @@ public class LadderClimb : MonoBehaviour
                     "Presiona E para subir la escalera.\nCuando llegues arriba, salta o presiona E para salir."
                 );
 
-                showInstructionOneTime = false; // ← NO volverá a mostrarla
+                showInstructionOneTime = false; 
             }
         }
     }
