@@ -5449,6 +5449,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3316897852226603829, guid: 0939b20054d455d44918d1beb6f0c07b, type: 3}
   m_PrefabInstance: {fileID: 2031162710}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &124219059
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 124219061}
+  - component: {fileID: 124219060}
+  m_Layer: 0
+  m_Name: 'LoaderScene '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &124219060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124219059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3da90defadd9f014880356e284124e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoaderScene
+--- !u!4 &124219061
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124219059}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1064.0963, y: 319.8261, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &124379061 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3316897852226603829, guid: 0939b20054d455d44918d1beb6f0c07b, type: 3}
@@ -65479,8 +65523,8 @@ MonoBehaviour:
   miniGame2Text: {fileID: 1183818873}
   pyramidText: {fileID: 518730524}
   miniGame3Text: {fileID: 0}
-  defaultColor: {r: 0.6392157, g: 0.54901963, b: 0.34509805, a: 1}
-  completedColor: {r: 0.5816135, g: 0.6392157, b: 0.052420773, a: 1}
+  defaultColor: {r: 0.60784316, g: 0.47058824, b: 0.21960784, a: 1}
+  completedColor: {r: 0.4431373, g: 0.17254902, b: 0.0627451, a: 1}
   lockedColor: {r: 0.6666667, g: 0.5411765, b: 0.4392157, a: 1}
   progressBar: {fileID: 1329314175}
 --- !u!1001 &931132281
@@ -92178,8 +92222,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283797422
-  m_fontColor: {r: 0.68235296, g: 0.56078434, b: 0.33333334, a: 1}
+    rgba: 4281890971
+  m_fontColor: {r: 0.60784316, g: 0.47058827, b: 0.21960784, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -123053,6 +123097,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1290447260}
     m_Modifications:
+    - target: {fileID: 1172614769357489754, guid: 97353bc8c81b931488ca60c509122125, type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1172614769357489754, guid: 97353bc8c81b931488ca60c509122125, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2903209429899859116, guid: 97353bc8c81b931488ca60c509122125, type: 3}
       propertyPath: m_Name
       value: End
@@ -123108,7 +123160,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2903209429899859116, guid: 97353bc8c81b931488ca60c509122125, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2042563384}
   m_SourcePrefab: {fileID: 100100000, guid: 97353bc8c81b931488ca60c509122125, type: 3}
 --- !u!1001 &1855079169
 PrefabInstance:
@@ -133235,6 +133290,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6427760346078757857, guid: 97353bc8c81b931488ca60c509122125, type: 3}
   m_PrefabInstance: {fileID: 1853928842}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2042563384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042563379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9175fde45201434498310ff979f668ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FinalPortalDirect
+  sceneToLoad: NIVEL 2
 --- !u!1001 &2043253498
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -138563,3 +138631,4 @@ SceneRoots:
   - {fileID: 1402187124}
   - {fileID: 910993129}
   - {fileID: 1752290113}
+  - {fileID: 124219061}
