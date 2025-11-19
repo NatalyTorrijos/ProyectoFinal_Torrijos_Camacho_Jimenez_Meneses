@@ -60,5 +60,9 @@ public class OrderedPuzzleManager : MonoBehaviour
 
         if (endPortal != null)
             endPortal.SetActive(true);
+
+        // --- ESTA ES LA PARTE CORRECTA ---
+        GameProgress.CompleteMiniGame(2);
     }
+
 }

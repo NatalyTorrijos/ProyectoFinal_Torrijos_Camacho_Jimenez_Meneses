@@ -2,21 +2,16 @@
 
 public class GameProgress : MonoBehaviour
 {
-    // ===========================
-    // 📍 PROGRESO DE MINIJUEGOS
-    // ===========================
     public static bool miniGame1Completed = false;
     public static bool miniGame2Completed = false;
+    public static bool miniGame3Completed = false;
 
     [Header("Pirámide")]
     public GameObject pyramidLocked;
     public GameObject pyramidUnlocked;
 
-    // ===========================
-    // 📍 PUNTO DE SPAWN PRINCIPAL (HUB)
-    // ===========================
     [Header("Spawn Principal (Hub)")]
-    public Transform spawnHub; // asigna aquí el cubo del hub
+    public Transform spawnHub;
     public static Transform staticSpawnHub;
 
     private void Awake()
@@ -29,53 +24,57 @@ public class GameProgress : MonoBehaviour
         UpdatePyramidState();
     }
 
-    // ===========================
-    // 📍 MARCAR MINIJUEGOS COMO COMPLETADOS
-    // ===========================
+    // =============================
+    // 🔥 Registrar minijuegos
+    // =============================
     public static void CompleteMiniGame(int index)
     {
-        if (index == 1)
-            miniGame1Completed = true;
-        else if (index == 2)
-            miniGame2Completed = true;
+        if (index == 1) miniGame1Completed = true;
+        else if (index == 2) miniGame2Completed = true;
+        else if (index == 3) miniGame3Completed = true;
     }
 
-    // ===========================
-    // 📍 ACTUALIZAR ESTADO DE LA PIRÁMIDE
-    // ===========================
-    public void UpdatePyramidState()
-    {
-        bool allDone = miniGame1Completed && miniGame2Completed;
-
-        if (pyramidLocked != null)
-            pyramidLocked.SetActive(!allDone);
-
-        if (pyramidUnlocked != null)
-            pyramidUnlocked.SetActive(allDone);
-    }
-
-    // ===========================
-    // 📍 VERIFICAR SI TODO ESTÁ COMPLETADO
-    // ===========================
-    public static bool AreAllMiniGamesDone()
+    // =============================
+    // 🔥 Condición para la pirámide
+    // =============================
+    public static bool AreMiniGamesForPyramidDone()
     {
         return miniGame1Completed && miniGame2Completed;
     }
 
-    // ===========================
-    // 📍 TELETRANSPORTAR AL HUB
-    // ===========================
+    // =============================
+    // 🔥 Estado visual de la pirámide
+    // =============================
+    public void UpdatePyramidState()
+    {
+        bool unlocked = AreMiniGamesForPyramidDone();
+
+        if (pyramidLocked != null)
+            pyramidLocked.SetActive(!unlocked);
+
+        if (pyramidUnlocked != null)
+            pyramidUnlocked.SetActive(unlocked);
+    }
+
+    // =============================
+    // 🔥 Todos los minijuegos del nivel
+    // =============================
+    public static bool AreAllMiniGamesDone()
+    {
+        return miniGame1Completed && miniGame2Completed && miniGame3Completed;
+    }
+
+    // =============================
+    // 🔥 Teleport
+    // =============================
     public static void TeleportToHub(GameObject player)
     {
         if (staticSpawnHub == null || player == null)
         {
-            Debug.LogWarning("❌ No se encontró el spawnHub o el player para teletransportar.");
+            Debug.LogWarning("No se encontró spawnHub o player.");
             return;
         }
 
-        // Solo cambia la posición — el RespawnTrigger se encarga del CharacterController
         player.transform.position = staticSpawnHub.position;
-
-        Debug.Log("✨ Teletransportado al Hub desde minijuego o trigger de respawn.");
     }
 }

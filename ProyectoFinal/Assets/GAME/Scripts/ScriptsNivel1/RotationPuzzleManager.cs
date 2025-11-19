@@ -55,6 +55,6 @@ public class RotationPuzzleManager : MonoBehaviour
             exitTeleporter.requireCompletion = false;
 
         // Registrar minijuego como completado
-        GameProgress.CompleteMiniGame(2);
+      
     }
 }
