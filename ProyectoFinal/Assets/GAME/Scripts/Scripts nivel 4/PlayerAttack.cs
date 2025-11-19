@@ -6,15 +6,23 @@ public class PlayerAttack : MonoBehaviour
     public float attackRange = 2f;
     public float attackCooldown = 0.6f;
 
-    public Transform attackPoint; 
+    public Transform attackPoint;
     public LayerMask bossLayer;
 
     private float nextAttackTime = 0f;
     private Animator anim;
 
+    // 🎵 SONIDOS
+    public AudioSource audioSource;
+    public AudioClip attackSwoosh;
+    public AudioClip hitBossSound;
+
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
+
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -34,6 +42,10 @@ public class PlayerAttack : MonoBehaviour
         if (anim != null)
             anim.SetTrigger("Attack");
 
+        // 🔊 reproduce sonido de swing
+        if (attackSwoosh != null)
+            audioSource.PlayOneShot(attackSwoosh);
+
         Collider[] hits = Physics.OverlapSphere(attackPoint.position, attackRange, bossLayer);
 
         foreach (Collider hit in hits)
@@ -43,6 +55,11 @@ public class PlayerAttack : MonoBehaviour
             if (bossHP != null)
             {
                 bossHP.TakeDamage(attackDamage);
+
+                // 🔊 sonido de golpe si pega al boss
+                if (hitBossSound != null)
+                    audioSource.PlayOneShot(hitBossSound);
+
                 Debug.Log("Le hiciste daño al Boss, nueva vida: " + bossHP.currentHealth);
             }
         }
