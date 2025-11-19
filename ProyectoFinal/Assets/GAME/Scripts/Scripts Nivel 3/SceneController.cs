@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SceneController : MonoBehaviour
 {
+
+   
+
     public static SceneController Instance;
     [Header("Coleccionables (Prismas)")]
     public int totalPrismas = 5;        // Lo defines en el inspector
@@ -72,7 +75,7 @@ public class SceneController : MonoBehaviour
 
     private void Update()
     {
-        // 🔥 El minijuego NO corre si no está activo
+       
         if (!minijuegoActivo) return;
 
         if (!timerRunning) return;
@@ -87,6 +90,7 @@ public class SceneController : MonoBehaviour
         if (currentTime <= 0)
             TiempoAgotado();
     }
+   
     public void RegistrarPrisma()
     {
         prismasRestantes--;

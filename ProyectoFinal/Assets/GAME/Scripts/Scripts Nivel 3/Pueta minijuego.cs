@@ -2,8 +2,11 @@
 
 public class PuertaMinijuego : MonoBehaviour
 {
-    public GameObject fabricaMinijuego;            // OBJETO QUE ACTIVAREMOS
-    public Transform puntoEntradaMinijuego;        // DONDE APARECE EL JUGADOR
+    public GameObject fabricaMinijuego;
+    public Transform puntoEntradaMinijuego;
+
+    // Panel de instrucciones del minijuego
+    public GameObject panelInstruccionMinijuego;
 
     private bool dentro = false;
 
@@ -11,6 +14,10 @@ public class PuertaMinijuego : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             dentro = true;
+
+        SceneController.Instance.EnqueueInstruction(
+            "Presiona T para entrar a la fábrica"
+        );
     }
 
     private void OnTriggerExit(Collider other)
@@ -23,39 +30,48 @@ public class PuertaMinijuego : MonoBehaviour
     {
         if (dentro && Input.GetKeyDown(KeyCode.T))
         {
+            SceneController.Instance.HideInstruction();
             IniciarMinijuego();
         }
     }
 
     void IniciarMinijuego()
     {
-        Debug.Log("📌 INICIANDO MINIJUEGO...");
+        Debug.Log("INICIANDO MINIJUEGO...");
 
-        // 1. Activar toda la fábrica
         fabricaMinijuego.SetActive(true);
-
-        // 2. Activar estado de minijuego
         SceneController.Instance.minijuegoActivo = true;
 
-        // 3. Configurar la plataforma inicial del SceneController
-        SceneController.Instance.PlataformaInicial = puntoEntradaMinijuego;
-
-        // 4. Teletransportar jugador
+        // Teletransportar jugador
         var cc = SceneController.Instance.Jugador.GetComponent<CharacterController>();
         cc.enabled = false;
         SceneController.Instance.Jugador.transform.position = puntoEntradaMinijuego.position + Vector3.up * 1f;
         cc.enabled = true;
 
-        // 5. Reiniciar el timer (solo funciona ahora que minijuegoActivo=true)
+        // Timer
         SceneController.Instance.ResetTimer();
-
-        // 6. Activar UI del tiempo
         SceneController.Instance.TimerText.gameObject.SetActive(true);
-
-        // 7. Activar el conteo
         SceneController.Instance.TimerRunning = true;
 
-        Debug.Log("🎮 Minijuego iniciado.");
+        // Mostrar instrucción del minijuego
+        if (panelInstruccionMinijuego != null)
+        {
+            panelInstruccionMinijuego.SetActive(true);
+            StartCoroutine(CerrarPanelDespuesDeTiempo(5f)); // ⬅ cierre automático
+        }
+        else
+        {
+            Debug.LogWarning("No asignaste el panel de instrucción del minijuego en el inspector.");
+        }
+    }
+
+    // ⬇ NUEVA CORRUTINA PARA CERRAR PANEL
+    private System.Collections.IEnumerator CerrarPanelDespuesDeTiempo(float tiempo)
+    {
+        yield return new WaitForSeconds(tiempo);
+
+        if (panelInstruccionMinijuego != null)
+            panelInstruccionMinijuego.SetActive(false);
     }
 }
 
