@@ -42,9 +42,10 @@ public class HUDMissionDisplay : MonoBehaviour
         // ================================
         // PIRÁMIDE
         // ================================
-        bool pyramidUnlocked = m1 && m2;
-        pyramidText.text = pyramidUnlocked ? "Pirámide " : "Pirámide ";
+        bool pyramidUnlocked = GameProgress.AreMiniGamesForPyramidDone();
+        pyramidText.text = "Pirámide";
         pyramidText.color = pyramidUnlocked ? completedColor : lockedColor;
+
 
         // ================================
         // MINIJUEGO 3 (solo aparece cuando pirámide está activa)
