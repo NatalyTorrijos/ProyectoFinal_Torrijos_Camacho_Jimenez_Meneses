@@ -1,30 +1,29 @@
 using UnityEngine;
 
-public class OpenPanelOnClick : MonoBehaviour
+public class OpenPanelOnTrigger : MonoBehaviour
 {
-    public GameObject panelMecanicas;
-    Camera cam;
+    public GameObject panelMecanicas;   // Lo asignas desde el inspector
 
     void Start()
     {
-        cam = Camera.main;
-        panelMecanicas.SetActive(false);
+        if (panelMecanicas != null)
+            panelMecanicas.SetActive(false);   // Se asegura de que inicie apagado
     }
 
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (other.CompareTag("Player"))
         {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            panelMecanicas.SetActive(true);
+        }
+    }
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.collider.gameObject == this.gameObject)
-                {
-                    panelMecanicas.SetActive(true);
-                }
-            }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            panelMecanicas.SetActive(false);
         }
     }
 }
+
