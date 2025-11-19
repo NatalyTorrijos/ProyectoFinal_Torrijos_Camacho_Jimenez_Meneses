@@ -22,7 +22,7 @@ public class HealthPlayer : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        if (isDead) return; // Evita daño doble
+        if (isDead) return;
 
         currentHealth -= amount;
 

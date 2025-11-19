@@ -16,23 +16,21 @@ public class NpcSpeak_Paquito : MonoBehaviour
 
     void Update()
     {
+        // Mostrar panel Press E cuando el jugador esté cerca y no esté ya abierto el diálogo
         if (playerInRange && !PanelPaquito.activeSelf)
             Panel_PressE.SetActive(true);
         else
             Panel_PressE.SetActive(false);
 
+        // Abrir diálogo al presionar E
         if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
             PanelPaquito.SetActive(true);
             Panel_PressE.SetActive(false);
         }
-
-        if (!playerInRange)
-        {
-            PanelPaquito.SetActive(false);
-        }
     }
 
+    // Este método se llama al cerrar el panel (usado por botón cerrar)
     public void CerrarPanel()
     {
         PanelPaquito.SetActive(false);
