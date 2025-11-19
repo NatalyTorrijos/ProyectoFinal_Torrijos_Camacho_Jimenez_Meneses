@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
@@ -8,9 +8,9 @@ public class BossController : MonoBehaviour
     [Header("----- AI SETTINGS -----")]
     public float detectDistance = 18f;
     public float attackDistance = 2.4f;
-    public float moveSpeed = 5.2f;       
-    public float rotateSpeed = 10f;      
-    public float attackCooldown = 0.8f; 
+    public float moveSpeed = 5.2f;
+    public float rotateSpeed = 10f;
+    public float attackCooldown = 0.8f;
 
     [Header("----- HEALTH SYSTEM -----")]
     public float maxHealth = 200f;
@@ -22,6 +22,12 @@ public class BossController : MonoBehaviour
 
     int idleIndexMemo = 1;
 
+    // 🎵 SONIDOS
+    public AudioSource audioSource;
+    public AudioClip[] attackSounds;
+    public AudioClip hitSound;
+    public AudioClip deathSound;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -29,6 +35,9 @@ public class BossController : MonoBehaviour
 
         idleIndexMemo = Random.Range(1, 4);
         anim.SetInteger("idleIndex", idleIndexMemo);
+
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -81,6 +90,13 @@ public class BossController : MonoBehaviour
 
         anim.SetInteger("attackIndex", Random.Range(1, 4));
         anim.SetTrigger("Attack");
+
+        // 🔊 reproducir sonido aleatorio de ataque
+        if (attackSounds.Length > 0)
+        {
+            AudioClip clip = attackSounds[Random.Range(0, attackSounds.Length)];
+            audioSource.PlayOneShot(clip);
+        }
     }
 
     void Idle()
@@ -94,6 +110,10 @@ public class BossController : MonoBehaviour
         if (isDead) return;
 
         currentHealth -= amount;
+
+        // 🔊 sonido de hit
+        if (hitSound != null)
+            audioSource.PlayOneShot(hitSound);
 
         if (currentHealth <= 0)
         {
@@ -110,5 +130,9 @@ public class BossController : MonoBehaviour
         isDead = true;
         anim.SetBool("isRunning", false);
         anim.SetTrigger("Die");
+
+        // 🔊 sonido de muerte
+        if (deathSound != null)
+            audioSource.PlayOneShot(deathSound);
     }
 }
