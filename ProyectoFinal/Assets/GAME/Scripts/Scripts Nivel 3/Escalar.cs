@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class LadderClimb : MonoBehaviour
 {
     public float climbSpeed = 4f;
-
+    public bool showInstructionOneTime = true;
     private bool playerInside = false;
     private bool climbing = false;
 
@@ -23,6 +23,15 @@ public class LadderClimb : MonoBehaviour
             anim = other.GetComponentInChildren<Animator>();
 
             Debug.Log("Entró al trigger, controller: " + (controller != null));
+
+            if (showInstructionOneTime)
+            {
+                SceneController.Instance.EnqueueInstruction(
+                    "Presiona E para subir la escalera.\nCuando llegues arriba, salta o presiona E para salir."
+                );
+
+                showInstructionOneTime = false; // ← NO volverá a mostrarla
+            }
         }
     }
 
@@ -44,7 +53,7 @@ public class LadderClimb : MonoBehaviour
                 anim.SetFloat("ClimbSpeed", 0f);
                 anim.speed = 1f;
             }
-
+            SceneController.Instance.HideInstruction();
             Debug.Log("Salió del trigger. Escalar OFF");
         }
     }

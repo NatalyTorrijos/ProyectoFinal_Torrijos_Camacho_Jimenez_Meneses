@@ -97,3 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ad2173b8a452649883b080e891a6ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Collectible
+  collectParticles: {fileID: 0}
+  tipo: 1

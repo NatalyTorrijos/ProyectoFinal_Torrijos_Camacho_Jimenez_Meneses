@@ -3,8 +3,7 @@
 public class LeverWithAnimation : MonoBehaviour
 {
     public GameObject rampa;
-    //public Color colorActivado = Color.green;
-
+    public bool showInstructionOneTime = true;
     public Animator leverAnimator;         // Animator del palo de la palanca
     public string triggerName = "Levantar"; // Nombre del trigger de animación
 
@@ -32,11 +31,7 @@ public class LeverWithAnimation : MonoBehaviour
             if (rampa != null)
                 rampa.SetActive(true);
 
-            // Cambiar color opcional
-            //if (rend != null)
-            //    rend.material.color = colorActivado;
-
-            // Activar animación de la palanca
+            
             if (leverAnimator != null)
                 leverAnimator.SetTrigger(triggerName);
 
@@ -50,6 +45,14 @@ public class LeverWithAnimation : MonoBehaviour
         {
             playerInRange = true;
             Debug.Log("Entré al trigger");
+            if (showInstructionOneTime)
+            {
+                SceneController.Instance.EnqueueInstruction(
+                    "Presiona K para activar la palanca.\n y subir la rampa."
+                );
+
+                showInstructionOneTime = false; // ← NO volverá a mostrarla
+            }
         }
     }
 
@@ -58,6 +61,7 @@ public class LeverWithAnimation : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            SceneController.Instance.HideInstruction();
             Debug.Log("Salí del trigger");
         }
     }
