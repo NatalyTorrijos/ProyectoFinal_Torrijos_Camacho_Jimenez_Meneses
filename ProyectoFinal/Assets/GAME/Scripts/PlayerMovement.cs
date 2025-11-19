@@ -41,6 +41,17 @@ public class PlayerMovement : MonoBehaviour
 
     bool isDead = false;
 
+    // ===========================================================
+    // 🔥 SISTEMA DE ATAQUE  (AGREGADO DESDE EL PRIMER SCRIPT)
+    // ===========================================================
+    [Header("----- ATTACK SYSTEM -----")]
+    public Transform punchPoint;
+    public float punchRange = 1.2f;
+    public int punchDamage = 1;
+    public LayerMask enemyLayer;
+
+    [HideInInspector] public bool isPunching = false;
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -70,6 +81,23 @@ public class PlayerMovement : MonoBehaviour
     {
         if (ctx.performed)
             jumpPressed = true;
+    }
+
+    // 🔥 CLICK IZQUIERDO PARA PEGAR  (AGREGADO)
+    public void OnPunch(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            anim.SetBool("IsPunching", true);
+            isPunching = true;
+            PunchAttack();
+        }
+
+        if (ctx.canceled)
+        {
+            anim.SetBool("IsPunching", false);
+            isPunching = false;
+        }
     }
 
     private void Update()
@@ -134,7 +162,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // ===========================================================
-    // 🔥 EMPUJE DE BLOQUES
+    // 🔥 EMPUJE DE BLOQUES + PLATAFORMA (DEL SEGUNDO SCRIPT)
     // ===========================================================
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -227,5 +255,50 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(Vector3.zero);
     }
 
-   
+    // ===========================================================
+    // SISTEMA DE ATAQUE — LLAMADO POR ANIMATION EVENT (AGREGADO)
+    // ===========================================================
+    public void DoPunch()
+    {
+        if (punchPoint == null) return;
+
+        Collider[] hits = Physics.OverlapSphere(punchPoint.position, punchRange, enemyLayer);
+
+        foreach (Collider hit in hits)
+        {
+            Enemigo enemy = hit.GetComponent<Enemigo>();
+
+            if (enemy == null)
+                enemy = hit.GetComponentInParent<Enemigo>();
+
+            if (enemy != null)
+                enemy.TakeDamage(punchDamage);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (punchPoint != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(punchPoint.position, punchRange);
+        }
+    }
+
+    // ===========================================================
+    // FUNCIÓN EXTRA DEL SISTEMA DE ATAQUE (AGREGADO)
+    // ===========================================================
+    void PunchAttack()
+    {
+        Collider[] enemies = Physics.OverlapSphere(punchPoint.position, punchRange, enemyLayer);
+
+        foreach (Collider enemy in enemies)
+        {
+            Enemigo e = enemy.GetComponent<Enemigo>();
+            if (e != null)
+            {
+                e.TakeDamage(punchDamage);
+            }
+        }
+    }
 }
