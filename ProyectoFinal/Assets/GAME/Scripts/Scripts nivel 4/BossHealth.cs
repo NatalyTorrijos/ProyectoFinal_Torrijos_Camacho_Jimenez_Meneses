@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -17,6 +17,9 @@ public class BossHealth : MonoBehaviour
     public Transform player;
     public float detectDistance = 15f;
 
+    [Header("Final Screen")]
+    public CanvasGroup finalPanel;   // 🔥 Panel final que aparecerá al morir el boss
+
     float nameTimer = 0f;
     bool uiVisible = false;
     bool nameShownOnce = false;
@@ -31,13 +34,22 @@ public class BossHealth : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         bossCollider = GetComponent<Collider>();
-        bossControllerScript = GetComponent<MonoBehaviour>();
+
+        // Busca automáticamente el BossController (tu AI)
+        bossControllerScript = GetComponent<BossController>();
 
         currentHealth = maxHealth;
 
+        // UI inicial
         uiGroup.alpha = 0f;
         uiGroup.gameObject.SetActive(false);
         bossNameText.gameObject.SetActive(false);
+
+        if (finalPanel != null)
+        {
+            finalPanel.alpha = 0f;
+            finalPanel.gameObject.SetActive(false);
+        }
 
         UpdateBar();
     }
@@ -56,6 +68,10 @@ public class BossHealth : MonoBehaviour
         HandleNameTimer();
     }
 
+    // ============================================================
+    // UI SHOW / HIDE
+    // ============================================================
+
     void ShowUI()
     {
         if (uiVisible) return;
@@ -64,6 +80,7 @@ public class BossHealth : MonoBehaviour
         uiGroup.gameObject.SetActive(true);
         StartFadeIn();
 
+        // Mostrar nombre del boss una sola vez cuando empieza la pelea
         if (!nameShownOnce)
         {
             nameShownOnce = true;
@@ -80,8 +97,10 @@ public class BossHealth : MonoBehaviour
         StartFadeOut();
     }
 
+    // Solo contar el tiempo mientras la UI está activa
     void HandleNameTimer()
     {
+        if (!uiVisible) return;    // 🔥 FIX: evita desaparecerlo antes de tiempo
         if (nameTimer <= 0) return;
 
         nameTimer -= Time.deltaTime;
@@ -89,6 +108,10 @@ public class BossHealth : MonoBehaviour
         if (nameTimer <= 0)
             bossNameText.gameObject.SetActive(false);
     }
+
+    // ============================================================
+    // DAMAGE
+    // ============================================================
 
     public void TakeDamage(float amount)
     {
@@ -111,6 +134,10 @@ public class BossHealth : MonoBehaviour
             healthFill.fillAmount = currentHealth / maxHealth;
     }
 
+    // ============================================================
+    // DEATH
+    // ============================================================
+
     void Die()
     {
         if (isDead) return;
@@ -125,7 +152,20 @@ public class BossHealth : MonoBehaviour
 
         if (bossCollider != null)
             bossCollider.enabled = true;
+
+        // Apagar nombre definitivamente
+        bossNameText.gameObject.SetActive(false);
+        nameTimer = 0f;
+
+        // 🔥 Mostrar pantalla final
+        if (finalPanel != null)
+            StartCoroutine(FadeFinalPanel());
     }
+
+
+    // ============================================================
+    // UI COROUTINES
+    // ============================================================
 
     void StartFadeIn()
     {
@@ -155,5 +195,26 @@ public class BossHealth : MonoBehaviour
 
         if (to == 0f)
             uiGroup.gameObject.SetActive(false);
+    }
+
+    // ============================================================
+    // FINAL SCREEN FADE
+    // ============================================================
+
+    System.Collections.IEnumerator FadeFinalPanel()
+    {
+        finalPanel.gameObject.SetActive(true);
+
+        float t = 0f;
+        float duration = 2f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            finalPanel.alpha = Mathf.Lerp(0f, 1f, t / duration);
+            yield return null;
+        }
+
+        finalPanel.alpha = 1f;
     }
 }

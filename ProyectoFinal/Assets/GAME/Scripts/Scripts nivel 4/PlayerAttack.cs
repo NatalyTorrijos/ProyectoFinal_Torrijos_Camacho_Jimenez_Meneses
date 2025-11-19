@@ -1,58 +1,75 @@
-﻿using UnityEngine;
+﻿//using UnityEngine;
 
-public class PlayerAttack : MonoBehaviour
-{
-    public float attackDamage = 20f;
-    public float attackRange = 2f;
-    public float attackCooldown = 0.6f;
+//public class PlayerAttack : MonoBehaviour
+//{
+//    public float attackDamage = 20f;
+//    public float attackRange = 2f;
+//    public float attackCooldown = 0.6f;
 
-    public Transform attackPoint; 
-    public LayerMask bossLayer;
+//    public Transform attackPoint;
+//    public LayerMask bossLayer;
 
-    private float nextAttackTime = 0f;
-    private Animator anim;
+//    private float nextAttackTime = 0f;
+//    private Animator anim;
 
-    void Start()
-    {
-        anim = GetComponentInChildren<Animator>();
-    }
+//    // 🎵 SONIDOS
+//    public AudioSource audioSource;
+//    public AudioClip attackSwoosh;
+//    public AudioClip hitBossSound;
 
-    void Update()
-    {
-        if (Time.time < nextAttackTime) return;
+//    void Start()
+//    {
+//        anim = GetComponentInChildren<Animator>();
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            DoAttack();
-        }
-    }
+//        if (audioSource == null)
+//            audioSource = gameObject.AddComponent<AudioSource>();
+//    }
 
-    void DoAttack()
-    {
-        nextAttackTime = Time.time + attackCooldown;
+//    void Update()
+//    {
+//        if (Time.time < nextAttackTime) return;
 
-        if (anim != null)
-            anim.SetTrigger("Attack");
+//        if (Input.GetMouseButtonDown(0))
+//        {
+//            DoAttack();
+//        }
+//    }
 
-        Collider[] hits = Physics.OverlapSphere(attackPoint.position, attackRange, bossLayer);
+//    //void DoAttack()
+//    //{
+//    //    nextAttackTime = Time.time + attackCooldown;
 
-        foreach (Collider hit in hits)
-        {
-            BossHealth bossHP = hit.GetComponentInParent<BossHealth>();
+//    //    if (anim != null)
+//    //        anim.SetTrigger("Attack");
 
-            if (bossHP != null)
-            {
-                bossHP.TakeDamage(attackDamage);
-                Debug.Log("Le hiciste daño al Boss, nueva vida: " + bossHP.currentHealth);
-            }
-        }
-    }
+//    //    // 🔊 reproduce sonido de swing
+//    //    if (attackSwoosh != null)
+//    //        audioSource.PlayOneShot(attackSwoosh);
 
-    void OnDrawGizmosSelected()
-    {
-        if (attackPoint == null) return;
+//    //    Collider[] hits = Physics.OverlapSphere(attackPoint.position, attackRange, bossLayer);
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-    }
-}
+//    //    foreach (Collider hit in hits)
+//    //    {
+//    //        BossHealth bossHP = hit.GetComponentInParent<BossHealth>();
+
+//    //        if (bossHP != null)
+//    //        {
+//    //            bossHP.TakeDamage(attackDamage);
+
+//    //            // 🔊 sonido de golpe si pega al boss
+//    //            if (hitBossSound != null)
+//    //                audioSource.PlayOneShot(hitBossSound);
+
+//    //            Debug.Log("Le hiciste daño al Boss, nueva vida: " + bossHP.currentHealth);
+//    //        }
+//    //    }
+//    //}
+
+//    void OnDrawGizmosSelected()
+//    {
+//        if (attackPoint == null) return;
+
+//        Gizmos.color = Color.red;
+//        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+//    }
+//}
