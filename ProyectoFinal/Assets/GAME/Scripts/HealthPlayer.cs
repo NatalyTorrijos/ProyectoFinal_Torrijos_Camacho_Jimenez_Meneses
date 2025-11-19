@@ -1,20 +1,25 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class HealthPlayer : MonoBehaviour
 {
+    [Header("Player Health Settings")]
     public int maxHealth = 5;
     public int currentHealth;
 
-    public GameObject[] hearts;        // Los 5 corazones
+    public GameObject[] hearts;        // Los 5 corazones en UI
     public GameObject panelRetry;      // Panel que aparece al morir
 
     bool isDead = false;
+
+    private Animator anim;             // ← Para animaciones Hit y Die
 
     void Start()
     {
         currentHealth = maxHealth;
         UpdateHearts();
+
+        anim = GetComponent<Animator>();   // ← Busca la animación en el Player
 
         if (panelRetry != null)
             panelRetry.SetActive(false);
@@ -25,6 +30,10 @@ public class HealthPlayer : MonoBehaviour
         if (isDead) return;
 
         currentHealth -= amount;
+
+        // --- Animación HIT ---
+        if (anim != null)
+            anim.SetTrigger("Hit");
 
         if (currentHealth < 0)
             currentHealth = 0;
@@ -49,17 +58,20 @@ public class HealthPlayer : MonoBehaviour
     {
         isDead = true;
 
-        // Mostrar panel
+        // --- Animación DIE ---
+        if (anim != null)
+            anim.SetTrigger("Die");
+
+        // Mostrar panel Retry
         if (panelRetry != null)
             panelRetry.SetActive(true);
 
-        // Iniciar reinicio autom�tico
+        // Reiniciar con delay
         StartCoroutine(RestartLevel());
     }
 
     System.Collections.IEnumerator RestartLevel()
     {
-        // Esperar 2 segundos
         yield return new WaitForSeconds(2f);
 
         // Reiniciar la escena actual
