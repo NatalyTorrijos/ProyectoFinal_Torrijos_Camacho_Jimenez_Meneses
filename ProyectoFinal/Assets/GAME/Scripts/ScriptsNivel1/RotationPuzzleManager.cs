@@ -31,6 +31,7 @@ public class RotationPuzzleManager : MonoBehaviour
 
         // Si todas están correctas → completar puzzle
         PuzzleCompleted();
+
     }
 
     private void PuzzleCompleted()

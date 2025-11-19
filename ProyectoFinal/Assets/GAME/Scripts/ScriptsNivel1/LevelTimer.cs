@@ -32,7 +32,9 @@ public class LevelTimer : MonoBehaviour
 
         currentTime -= Time.deltaTime;
 
-        // Modo advertencia
+        // ============================
+        // MODO ADVERTENCIA
+        // ============================
         if (!warningMode && currentTime <= 120f)
         {
             warningMode = true;
@@ -67,7 +69,7 @@ public class LevelTimer : MonoBehaviour
 
     private void RestartLevel()
     {
-        UIMessageManager.Instance?.ShowPriority("⏳ Tiempo agotado. Reiniciando...", 2f);
+        UIMessageManager.Instance?.ShowPriority("Tiempo agotado. Reiniciando...", 2f);
         Invoke(nameof(ReloadScene), 2f);
     }
 
@@ -75,18 +77,5 @@ public class LevelTimer : MonoBehaviour
     {
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.buildIndex);
-    }
-
-    // ------------------------------------
-    // MÉTODOS NUEVOS PARA GUARDAR TIEMPO
-    // ------------------------------------
-    public float GetElapsedTime()
-    {
-        return totalTime - currentTime;
-    }
-
-    public float GetRemainingTime()
-    {
-        return currentTime;
     }
 }

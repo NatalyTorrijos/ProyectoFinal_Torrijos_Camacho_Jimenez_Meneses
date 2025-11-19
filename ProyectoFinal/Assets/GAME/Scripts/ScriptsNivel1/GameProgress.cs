@@ -25,7 +25,7 @@ public class GameProgress : MonoBehaviour
     }
 
     // =============================
-    // 🔥 Registrar minijuegos
+    // Registrar minijuegos
     // =============================
     public static void CompleteMiniGame(int index)
     {
@@ -35,7 +35,7 @@ public class GameProgress : MonoBehaviour
     }
 
     // =============================
-    // 🔥 Condición para la pirámide
+    // Condición para la pirámide
     // =============================
     public static bool AreMiniGamesForPyramidDone()
     {
@@ -43,21 +43,17 @@ public class GameProgress : MonoBehaviour
     }
 
     // =============================
-    // 🔥 Estado visual de la pirámide
+    // Estado visual de la pirámide
     // =============================
     public void UpdatePyramidState()
     {
         bool unlocked = AreMiniGamesForPyramidDone();
-
-        if (pyramidLocked != null)
-            pyramidLocked.SetActive(!unlocked);
-
-        if (pyramidUnlocked != null)
-            pyramidUnlocked.SetActive(unlocked);
+        if (pyramidLocked != null) pyramidLocked.SetActive(!unlocked);
+        if (pyramidUnlocked != null) pyramidUnlocked.SetActive(unlocked);
     }
 
     // =============================
-    // 🔥 Todos los minijuegos del nivel
+    // Todos los minijuegos del nivel
     // =============================
     public static bool AreAllMiniGamesDone()
     {
@@ -65,7 +61,7 @@ public class GameProgress : MonoBehaviour
     }
 
     // =============================
-    // 🔥 Teleport
+    // Teleport
     // =============================
     public static void TeleportToHub(GameObject player)
     {
@@ -74,7 +70,6 @@ public class GameProgress : MonoBehaviour
             Debug.LogWarning("No se encontró spawnHub o player.");
             return;
         }
-
         player.transform.position = staticSpawnHub.position;
     }
 }

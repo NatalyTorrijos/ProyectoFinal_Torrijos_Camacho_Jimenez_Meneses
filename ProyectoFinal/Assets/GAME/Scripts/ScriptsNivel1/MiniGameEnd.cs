@@ -24,8 +24,7 @@ public class MiniGameEnd : MonoBehaviour
 
         // 2️⃣ Actualiza la pirámide
         var progress = FindObjectOfType<GameProgress>();
-        if (progress != null)
-            progress.UpdatePyramidState();
+        if (progress != null) progress.UpdatePyramidState();
 
         // 3️⃣ Mostrar mensaje adecuado
         if (UIMessageManager.Instance != null)
@@ -39,7 +38,7 @@ public class MiniGameEnd : MonoBehaviour
         // 4️⃣ Teletransportar al jugador al Hub
         TeleportToHubHelper.SafeTeleport(other.gameObject);
 
-        // 🌀 Instanciar partículas de respawn en el Hub
+        // Instanciar partículas de respawn en el Hub
         if (respawnEffect != null && GameProgress.staticSpawnHub != null)
         {
             Vector3 spawnPos = GameProgress.staticSpawnHub.position + Vector3.up * 0.5f;
@@ -47,6 +46,6 @@ public class MiniGameEnd : MonoBehaviour
             Destroy(fx, 3f);
         }
 
-        Debug.Log($"✅ Minijuego {miniGameIndex} completado y jugador teletransportado al hub.");
+        Debug.Log($"Minijuego {miniGameIndex} completado y jugador teletransportado al hub.");
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class FinalPortalDirect : MonoBehaviour
 {
     [Header("Escena a cargar al tocar el portal")]
-    public string sceneToLoad = "NIVEL 2";
+    public string sceneToLoad = "NIVEL 2"; // <-- Cambia por el nombre exacto de tu escena
 
     private bool activated = false;
 
@@ -15,15 +15,7 @@ public class FinalPortalDirect : MonoBehaviour
 
         activated = true;
 
-        // 🔥 Guardar tiempo del nivel antes de cambiar de escena
-        LevelTimer timer = FindObjectOfType<LevelTimer>();
-        if (timer != null)
-        {
-            float elapsed = timer.GetElapsedTime();
-            string levelName = SceneManager.GetActiveScene().name;
-            GameManager.Instance.SaveLevelTime(levelName, elapsed);
-        }
-
+        // Cargar directamente la escena final
         SceneManager.LoadScene(sceneToLoad);
     }
 }
