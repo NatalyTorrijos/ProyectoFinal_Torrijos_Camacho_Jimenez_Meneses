@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9122268215338689558}
   - component: {fileID: 5719389320491826599}
   - component: {fileID: 8378708064254871005}
+  - component: {fileID: -4121803763477965411}
   m_Layer: 0
   m_Name: Cubo_movible
   m_TagString: Untagged
@@ -155,3 +156,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.598529, y: 0.8, z: 1.5985305}
   m_Center: {x: 0, y: 0.39999995, z: 0.0000007748604}
+--- !u!114 &-4121803763477965411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9156406343380642417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 921195873bcea904a8f2d66cb9eec596, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PushableBlockHint
+  hintDistance: 2
