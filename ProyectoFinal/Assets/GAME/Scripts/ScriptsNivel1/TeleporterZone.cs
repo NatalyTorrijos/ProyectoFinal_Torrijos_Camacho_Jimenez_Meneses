@@ -27,9 +27,9 @@ public class TeleporterZone : MonoBehaviour
         if (requireCompletion && !GameProgress.AreMiniGamesForPyramidDone())
         {
             if (UIMessageManager.Instance != null)
-                UIMessageManager.Instance.ShowMessage("❌ TE FALTA COMPLETAR UN MINIJUEGO.\n VE A LOS OTROS EDIFICIOS");
+                UIMessageManager.Instance.ShowMessage("TE FALTA COMPLETAR UN MINIJUEGO.\n VE A LOS OTROS EDIFICIOS");
 
-            Debug.Log("⛔ Acceso bloqueado a la pirámide");
+            Debug.Log("Acceso bloqueado a la pirámide");
             return;
         }
 
@@ -70,7 +70,7 @@ public class TeleporterZone : MonoBehaviour
         if (movement != null)
             movement.OnRespawn();
 
-        Debug.Log($"✅ Teletransportado a {teleportDestination.name}");
+        Debug.Log($"Teletransportado a {teleportDestination.name}");
         isTeleporting = false;
     }
 }
