@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 8198350629606286980}
   - component: {fileID: 7356517258198567471}
   - component: {fileID: 311851496810565888}
-  - component: {fileID: 6960246579107383532}
   - component: {fileID: 1963686078844612908}
   - component: {fileID: -5842212961022646508}
   m_Layer: 6
@@ -33,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 191.20007, y: -0.20895004, z: -7.9}
-  m_LocalScale: {x: 3, y: 1, z: 2}
+  m_LocalScale: {x: 8, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -339,28 +338,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 235628809347231804}
   m_Mesh: {fileID: 0}
---- !u!64 &6960246579107383532
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235628809347231804}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &1963686078844612908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,12 +347,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 235628809347231804}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ace9052c5640d741a835f3f09e20964, type: 3}
+  m_Script: {fileID: 11500000, guid: 244416c63a1799d47a4aa4289dd7cdbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CubeCell
-  cubeID: 0
-  puzzle: {fileID: 0}
-  rend: {fileID: 7356517258198567471}
+  esCorrecta: 0
 --- !u!65 &-5842212961022646508
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -391,7 +366,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

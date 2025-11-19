@@ -27,6 +27,9 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private bool jumpPressed;
 
+    // ===========================================================
+    // 🔥 SISTEMA DE VIDA DEL PLAYER
+    // ===========================================================
     [Header("----- PLAYER HEALTH -----")]
     public float maxHealth = 100f;
     public float currentHealth;
@@ -37,18 +40,6 @@ public class PlayerMovement : MonoBehaviour
     public TextMeshProUGUI hpText;
 
     bool isDead = false;
-
-    // ===========================================================
-    // SISTEMA DE ATAQUE
-    // ===========================================================
-    [Header("----- ATTACK SYSTEM -----")]
-    public Transform punchPoint;      // Empty en la mano del player
-    public float punchRange = 1.2f;   // Rango del golpe
-    public int punchDamage = 1;       // Daño del punch
-    public LayerMask enemyLayer;      // Solo golpea enemigos
-
-    [HideInInspector] public bool isPunching = false;
-
 
     private void Awake()
     {
@@ -80,24 +71,6 @@ public class PlayerMovement : MonoBehaviour
         if (ctx.performed)
             jumpPressed = true;
     }
-
-    // 🔥 CLICK IZQUIERDO PARA PEGAR
-    public void OnPunch(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed)
-        {
-            anim.SetBool("IsPunching", true);
-            isPunching = true;
-            PunchAttack();
-        }
-
-        if (ctx.canceled)
-        {
-            anim.SetBool("IsPunching", false);
-            isPunching = false;
-        }
-    }
-
 
     private void Update()
     {
@@ -161,10 +134,17 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // ===========================================================
-    // EMPUJE DE BLOQUES
+    // 🔥 EMPUJE DE BLOQUES
     // ===========================================================
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        Plataforma p = hit.collider.GetComponent<Plataforma>();
+
+        if (p != null)
+        {
+            p.TocarPlataforma();
+        }
+
         PushableBlock pushable = hit.collider.GetComponent<PushableBlock>();
         if (pushable == null) return;
 
@@ -229,36 +209,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // ===========================================================
-    // SISTEMA DE ATAQUE — LLAMADO POR ANIMATION EVENT
-    // ===========================================================
-    public void DoPunch()
-    {
-        if (punchPoint == null) return;
-
-        Collider[] hits = Physics.OverlapSphere(punchPoint.position, punchRange, enemyLayer);
-
-        foreach (Collider hit in hits)
-        {
-            Enemigo enemy = hit.GetComponent<Enemigo>();
-
-            if (enemy == null)
-                enemy = hit.GetComponentInParent<Enemigo>();
-
-            if (enemy != null)
-                enemy.TakeDamage(punchDamage);
-        }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (punchPoint != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(punchPoint.position, punchRange);
-        }
-    }
-
     // ===========================
     // RESPAWN
     // ===========================
@@ -277,21 +227,5 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(Vector3.zero);
     }
 
-    void PunchAttack()
-    {
-        // Detectar enemigos en el rango del puño
-        Collider[] enemies = Physics.OverlapSphere(punchPoint.position, punchRange, enemyLayer);
-
-        foreach (Collider enemy in enemies)
-        {
-            Enemigo e = enemy.GetComponent<Enemigo>();
-            if (e != null)
-            {
-                e.TakeDamage(punchDamage);
-            }
-        }
-    }
-
-
-
+   
 }

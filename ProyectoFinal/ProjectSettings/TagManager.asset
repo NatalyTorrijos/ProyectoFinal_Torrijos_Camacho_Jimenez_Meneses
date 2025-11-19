@@ -8,12 +8,11 @@ TagManager:
   - Interactivo
   - Enemy2
   - CubosMinijuegoNat
-  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Enemy
+  - 
   - Water
   - UI
   - Cubos
