@@ -31,8 +31,8 @@ public class PyramidActivator : MonoBehaviour
     {
         if (isActive) return;
 
-        // Si los dos minijuegos están completos, activar la pirámide
-        if (GameProgress.AreAllMiniGamesDone())
+        // CORREGIDO: ahora usa los minijuegos 1 y 2
+        if (GameProgress.AreMiniGamesForPyramidDone())
         {
             ActivatePyramid();
         }
@@ -47,6 +47,7 @@ public class PyramidActivator : MonoBehaviour
             );
         }
     }
+
 
     public void ActivatePyramid()
     {
