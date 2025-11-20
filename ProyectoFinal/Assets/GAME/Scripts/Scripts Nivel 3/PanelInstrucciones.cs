@@ -1,13 +1,18 @@
 using UnityEngine;
+/// <summary>
+/// Controla la visibilidad de un panel de mecánicas al detectar al jugador.
+/// Muestra el panel cuando el jugador entra en el área del trigger
+/// y lo oculta cuando sale.
+/// </summary>
 
 public class OpenPanelOnTrigger : MonoBehaviour
 {
-    public GameObject panelMecanicas;   // Lo asignas desde el inspector
+    public GameObject panelMecanicas;   
 
     void Start()
     {
         if (panelMecanicas != null)
-            panelMecanicas.SetActive(false);   // Se asegura de que inicie apagado
+            panelMecanicas.SetActive(false);  
     }
 
     private void OnTriggerEnter(Collider other)

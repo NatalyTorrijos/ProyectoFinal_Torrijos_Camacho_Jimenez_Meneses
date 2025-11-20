@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 91ef5cea7fbce5641895e476694f834b
+guid: bffcc2488fe5d97479efb17b931267b4
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -14,5 +14,5 @@ AssetOrigin:
   productId: 251882
   packageName: 'Prop Maker: Ladder - Procedural Ladder'
   packageVersion: 1.0.1
-  assetPath: Assets/Fillefranz/PropMaker/Scripts/Ladder.cs
+  assetPath: Assets/Fillefranz/Tools/Tools/DataTypes.cs
   uploadId: 750599
