@@ -1,8 +1,13 @@
 using UnityEngine;
+/// <summary>
+/// Representa una plataforma que puede ser correcta o incorrecta
+/// dentro del minijuego. Cambia su color según el resultado y
+/// notifica al SceneController para validar o reiniciar al jugador.
+/// </summary>
 
 public class Plataforma : MonoBehaviour
 {
-    public bool esCorrecta;   // Activa si es parte del camino correcto
+    public bool esCorrecta;  
     private Renderer rend;
 
     private void Start()

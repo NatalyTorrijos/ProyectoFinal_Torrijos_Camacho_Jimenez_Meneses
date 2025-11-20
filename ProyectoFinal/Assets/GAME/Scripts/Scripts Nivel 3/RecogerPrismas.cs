@@ -1,4 +1,9 @@
 ﻿using UnityEngine;
+/// <summary>
+/// Gestiona el comportamiento de un coleccionable (prisma o llave).
+/// Al ser recogido por el jugador, reproduce efectos visuales y de sonido,
+/// actualiza el progreso del minijuego y ajusta el checkpoint del jugador.
+/// </summary>
 
 public class Collectible : MonoBehaviour
 {
