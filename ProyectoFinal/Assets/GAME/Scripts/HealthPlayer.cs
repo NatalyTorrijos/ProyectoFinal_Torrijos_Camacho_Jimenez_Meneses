@@ -1,25 +1,28 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+/// <summary>
+/// en este escript esta todo lo que es la vida del Player, tambien del nivel2 ya que a la hora de morir, el player reinicia el nivel y activa el panel retry del nivel2.
+/// </summary>
 
 public class HealthPlayer : MonoBehaviour
 {
-    [Header("Player Health Settings")]
+    [Header("Salud del jugador")]
     public int maxHealth = 5;
     public int currentHealth;
 
-    public GameObject[] hearts;        // Los 5 corazones en UI
-    public GameObject panelRetry;      // Panel que aparece al morir
+    public GameObject[] hearts;        
+    public GameObject panelRetry;      
 
     bool isDead = false;
 
-    private Animator anim;             // ← Para animaciones Hit y Die
+    private Animator anim;            
 
     void Start()
     {
         currentHealth = maxHealth;
         UpdateHearts();
 
-        anim = GetComponent<Animator>();   // ← Busca la animación en el Player
+        anim = GetComponent<Animator>();  
 
         if (panelRetry != null)
             panelRetry.SetActive(false);
@@ -31,7 +34,7 @@ public class HealthPlayer : MonoBehaviour
 
         currentHealth -= amount;
 
-        // --- Animación HIT ---
+      //-----------------------------------------Animacion Hit (al recibir daño del enemigo)
         if (anim != null)
             anim.SetTrigger("Hit");
 
@@ -46,7 +49,7 @@ public class HealthPlayer : MonoBehaviour
         }
     }
 
-    void UpdateHearts()
+    void UpdateHearts() 
     {
         for (int i = 0; i < hearts.Length; i++)
         {
@@ -54,27 +57,27 @@ public class HealthPlayer : MonoBehaviour
         }
     }
 
-    void Die()
+    void Die() //---------------------------------------------------Animacion de morir
     {
         isDead = true;
 
-        // --- Animación DIE ---
+        
         if (anim != null)
             anim.SetTrigger("Die");
 
-        // Mostrar panel Retry
+        
         if (panelRetry != null)
             panelRetry.SetActive(true);
 
-        // Reiniciar con delay
+        
         StartCoroutine(RestartLevel());
     }
 
-    System.Collections.IEnumerator RestartLevel()
+    System.Collections.IEnumerator RestartLevel() //----------------------se reinicia el nivel al morir
     {
         yield return new WaitForSeconds(2f);
 
-        // Reiniciar la escena actual
+        
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

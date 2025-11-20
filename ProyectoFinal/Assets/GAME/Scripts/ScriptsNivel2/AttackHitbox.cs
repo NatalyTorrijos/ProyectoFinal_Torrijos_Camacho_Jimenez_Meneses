@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// En este script lo que se hace es ver o validar la hitbox de la mano del enemigo toca al player, para asi quitarle vida.
+/// </summary>
+
 public class AttackHitbox : MonoBehaviour
 {
     public float damage = 1f;

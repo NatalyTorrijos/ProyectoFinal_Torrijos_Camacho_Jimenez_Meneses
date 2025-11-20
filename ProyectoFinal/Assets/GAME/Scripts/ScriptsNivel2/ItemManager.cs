@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+/// <summary>
+/// en este script se hace la logica de los 2 objetos del nivel2, donde el player para ayudar a merlin tiene que nencontrar 2 objetos, la bag_3 y la DishingRod,  si los recogio o no.
+/// </summary>
 
 public class ItemManager : MonoBehaviour
 {

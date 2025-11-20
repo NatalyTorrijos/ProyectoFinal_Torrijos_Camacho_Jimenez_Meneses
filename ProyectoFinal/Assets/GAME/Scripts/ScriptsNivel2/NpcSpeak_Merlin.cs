@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+/// <summary>
+/// en este script se evalua todo lo que es la interacciones dle player con merlin, el primer dialogo al darle a la E, y despues de recoger los 2 items y hablar nuevamente.
+/// </summary>
 
 public class NpcSpeak_Merlin : MonoBehaviour
 {
@@ -17,7 +20,7 @@ public class NpcSpeak_Merlin : MonoBehaviour
         Panel_PressE.SetActive(false);
     }
 
-    void Update()
+    void Update()           
     {
         if (playerInRange && !PanelMerlin1.activeSelf && !PanelMerlin2.activeSelf)
             Panel_PressE.SetActive(true);
@@ -70,7 +73,7 @@ public class NpcSpeak_Merlin : MonoBehaviour
         }
     }
 
-    public void ActivarSiguienteDialogo()
+    public void ActivarSiguienteDialogo()  //------------Esto es con el itemManager
     {
         dialogoFinalDisponible = true;
         Debug.Log("Merlin: ¡Tienes ambos objetos! Ahora puedes ver el diálogo final.");
