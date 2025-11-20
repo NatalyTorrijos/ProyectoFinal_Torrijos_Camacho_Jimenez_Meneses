@@ -11,6 +11,7 @@ public class BossController : MonoBehaviour
     public float moveSpeed = 5.2f;
     public float rotateSpeed = 10f;
     public float attackCooldown = 0.8f;
+    public float attackAngleTolerance = 35f; // ← EVITA QUE SE QUEDE QUIETO
 
     [Header("----- HEALTH SYSTEM -----")]
     public float maxHealth = 200f;
@@ -79,6 +80,17 @@ public class BossController : MonoBehaviour
         Vector3 dir = (player.position - transform.position).normalized;
         dir.y = 0;
 
+        // Calcular si el boss está bien orientado al jugador
+        float angle = Vector3.Angle(transform.forward, dir);
+
+        // ❗ EVITAR QUE SE QUEDE QUIETO
+        if (angle > attackAngleTolerance)
+        {
+            RunToPlayer();  // si no está bien alineado, que siga acomodándose
+            return;
+        }
+
+        // Rotar suavemente hacia el jugador
         Quaternion rot = Quaternion.LookRotation(dir);
         transform.rotation = Quaternion.Slerp(transform.rotation, rot, rotateSpeed * Time.deltaTime);
 
@@ -91,7 +103,7 @@ public class BossController : MonoBehaviour
         anim.SetInteger("attackIndex", Random.Range(1, 4));
         anim.SetTrigger("Attack");
 
-        // 🔊 reproducir sonido aleatorio de ataque
+        // 🔊 reproducir sonido de ataque
         if (attackSounds.Length > 0)
         {
             AudioClip clip = attackSounds[Random.Range(0, attackSounds.Length)];
@@ -111,7 +123,6 @@ public class BossController : MonoBehaviour
 
         currentHealth -= amount;
 
-        // 🔊 sonido de hit
         if (hitSound != null)
             audioSource.PlayOneShot(hitSound);
 
@@ -131,7 +142,6 @@ public class BossController : MonoBehaviour
         anim.SetBool("isRunning", false);
         anim.SetTrigger("Die");
 
-        // 🔊 sonido de muerte
         if (deathSound != null)
             audioSource.PlayOneShot(deathSound);
     }

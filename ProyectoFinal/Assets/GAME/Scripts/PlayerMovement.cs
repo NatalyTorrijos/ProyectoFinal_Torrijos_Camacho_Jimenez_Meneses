@@ -27,30 +27,30 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private bool jumpPressed;
 
-    // ===========================================================
-    // 🔥 SISTEMA DE VIDA DEL PLAYER
-    // ===========================================================
-    [Header("----- PLAYER HEALTH -----")]
+    [Header("PLAYER HEALTH")]
     public float maxHealth = 100f;
     public float currentHealth;
 
-    [Header("----- UI -----")]
+    [Header("UI")]
     public Image healthFill;
     public CanvasGroup damageFlash;
     public TextMeshProUGUI hpText;
 
     bool isDead = false;
 
-    // ===========================================================
-    // 🔥 SISTEMA DE ATAQUE  (AGREGADO DESDE EL PRIMER SCRIPT)
-    // ===========================================================
-    [Header("----- ATTACK SYSTEM -----")]
+    [Header("ATTACK SYSTEM")]
     public Transform punchPoint;
     public float punchRange = 1.2f;
     public int punchDamage = 1;
     public LayerMask enemyLayer;
+    public LayerMask bossLayer; // <--- AÑADIDO
 
     [HideInInspector] public bool isPunching = false;
+
+    [Header("SOUNDS")]
+    public AudioSource audioSource;
+    public AudioClip attackSound;
+    public AudioClip hitSound;
 
     private void Awake()
     {
@@ -67,11 +67,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (hpText != null)
             hpText.text = maxHealth.ToString();
+
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
-    // ===========================
-    // INPUT SYSTEM
-    // ===========================
     public void OnMove(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
@@ -83,13 +83,16 @@ public class PlayerMovement : MonoBehaviour
             jumpPressed = true;
     }
 
-    // 🔥 CLICK IZQUIERDO PARA PEGAR  (AGREGADO)
     public void OnPunch(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
         {
             anim.SetBool("IsPunching", true);
             isPunching = true;
+
+            if (attackSound != null)
+                audioSource.PlayOneShot(attackSound);
+
             PunchAttack();
         }
 
@@ -161,17 +164,12 @@ public class PlayerMovement : MonoBehaviour
         anim.SetFloat("Speed", animSpeed);
     }
 
-    // ===========================================================
-    // 🔥 EMPUJE DE BLOQUES + PLATAFORMA (DEL SEGUNDO SCRIPT)
-    // ===========================================================
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Plataforma p = hit.collider.GetComponent<Plataforma>();
 
         if (p != null)
-        {
             p.TocarPlataforma();
-        }
 
         PushableBlock pushable = hit.collider.GetComponent<PushableBlock>();
         if (pushable == null) return;
@@ -192,9 +190,6 @@ public class PlayerMovement : MonoBehaviour
         pushable.Push(pushDir);
     }
 
-    // ===========================================================
-    // RECIBIR DAÑO DEL JEFE
-    // ===========================================================
     public void TakeDamage(float amount)
     {
         if (isDead) return;
@@ -237,9 +232,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // ===========================
-    // RESPAWN
-    // ===========================
     public void OnRespawn()
     {
         moveInput = Vector2.zero;
@@ -255,24 +247,34 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(Vector3.zero);
     }
 
-    // ===========================================================
-    // SISTEMA DE ATAQUE — LLAMADO POR ANIMATION EVENT (AGREGADO)
-    // ===========================================================
     public void DoPunch()
     {
         if (punchPoint == null) return;
 
-        Collider[] hits = Physics.OverlapSphere(punchPoint.position, punchRange, enemyLayer);
+        Collider[] hits = Physics.OverlapSphere(punchPoint.position, punchRange, enemyLayer | bossLayer);
 
         foreach (Collider hit in hits)
         {
             Enemigo enemy = hit.GetComponent<Enemigo>();
-
             if (enemy == null)
                 enemy = hit.GetComponentInParent<Enemigo>();
 
             if (enemy != null)
+            {
                 enemy.TakeDamage(punchDamage);
+                if (hitSound != null) audioSource.PlayOneShot(hitSound);
+                continue;
+            }
+
+            BossHealth boss = hit.GetComponent<BossHealth>();
+            if (boss == null)
+                boss = hit.GetComponentInParent<BossHealth>();
+
+            if (boss != null)
+            {
+                boss.TakeDamage(punchDamage);
+                if (hitSound != null) audioSource.PlayOneShot(hitSound);
+            }
         }
     }
 
@@ -285,12 +287,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // ===========================================================
-    // FUNCIÓN EXTRA DEL SISTEMA DE ATAQUE (AGREGADO)
-    // ===========================================================
     void PunchAttack()
     {
-        Collider[] enemies = Physics.OverlapSphere(punchPoint.position, punchRange, enemyLayer);
+        Collider[] enemies = Physics.OverlapSphere(punchPoint.position, punchRange, enemyLayer | bossLayer);
 
         foreach (Collider enemy in enemies)
         {
@@ -298,6 +297,18 @@ public class PlayerMovement : MonoBehaviour
             if (e != null)
             {
                 e.TakeDamage(punchDamage);
+                if (hitSound != null) audioSource.PlayOneShot(hitSound);
+                continue;
+            }
+
+            BossHealth boss = enemy.GetComponent<BossHealth>();
+            if (boss == null)
+                boss = enemy.GetComponentInParent<BossHealth>();
+
+            if (boss != null)
+            {
+                boss.TakeDamage(punchDamage);
+                if (hitSound != null) audioSource.PlayOneShot(hitSound);
             }
         }
     }
