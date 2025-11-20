@@ -2,30 +2,41 @@
 
 public class BossDamageZone : MonoBehaviour
 {
-    public float damage = 25f;
-    public bool canDamage = false;
+    public int damageToPlayer = 1;
+    public float damageCooldown = 0.7f;
+
+    bool canDamage = true;
 
     private void OnTriggerEnter(Collider other)
     {
+        TryDamage(other);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        TryDamage(other);
+    }
+
+    void TryDamage(Collider other)
+    {
         if (!canDamage) return;
 
-        if (other.CompareTag("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            PlayerMovement player = other.GetComponent<PlayerMovement>();
+            HealthPlayer player = other.GetComponent<HealthPlayer>();
+
             if (player != null)
             {
-                player.TakeDamage(damage);
+                player.TakeDamage(damageToPlayer);
+                StartCoroutine(DamageDelay());
             }
         }
     }
 
-    public void EnableDamage()
-    {
-        canDamage = true;
-    }
-
-    public void DisableDamage()
+    System.Collections.IEnumerator DamageDelay()
     {
         canDamage = false;
+        yield return new WaitForSeconds(damageCooldown);
+        canDamage = true;
     }
 }
