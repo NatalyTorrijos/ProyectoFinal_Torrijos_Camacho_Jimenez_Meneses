@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class CollectibleController : MonoBehaviour
@@ -13,7 +13,7 @@ public class CollectibleController : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this; // Todos los coleccionables podr�n usar esto
+        Instance = this; // Todos los coleccionables podrán usar esto
     }
 
     void Start()
@@ -24,16 +24,28 @@ public class CollectibleController : MonoBehaviour
 
     public void SpawnNextCollectible()
     {
-        if (currentIndex < spawnPoints.Count)
+        Debug.Log("SpawnNextCollectible llamado. Índice actual: " + currentIndex);
+
+       if (currentIndex < spawnPoints.Count)
         {
-            Instantiate(collectiblePrefab,
-                        spawnPoints[currentIndex].position,
-                        Quaternion.identity);
+            GameObject col = Instantiate(
+                collectiblePrefab,
+                spawnPoints[currentIndex].position,
+                Quaternion.identity
+            );
+
+            // ✔ Le decimos al coleccionable cuál checkpoint representa
+            col.GetComponent<Collectible>().checkpointIndex = currentIndex;
+
             currentIndex++;
         }
         else
         {
-            keyObject.SetActive(true); // Activar llave al final
+            Debug.Log("No hay más prismas. Activando llave.");
+            keyObject.SetActive(true);
+
         }
     }
+   
+
 }

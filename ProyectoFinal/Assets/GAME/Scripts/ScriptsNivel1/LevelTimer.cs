@@ -4,6 +4,8 @@ using TMPro;
 
 public class LevelTimer : MonoBehaviour
 {
+    public static LevelTimer Instance;   // <-- Accesible desde otros scripts
+
     [Header("Duración del nivel (segundos)")]
     public float totalTime = 120f;
 
@@ -21,6 +23,7 @@ public class LevelTimer : MonoBehaviour
 
     private void Start()
     {
+        Instance = this;                     // <-- Guardamos referencia global
         currentTime = totalTime;
         originalColor = timerText.color;
         UpdateUI();
@@ -32,7 +35,9 @@ public class LevelTimer : MonoBehaviour
 
         currentTime -= Time.deltaTime;
 
-        // Modo advertencia
+        // ============================
+        // 🔥 MODO ADVERTENCIA (faltan 2 min)
+        // ============================
         if (!warningMode && currentTime <= 120f)
         {
             warningMode = true;
@@ -45,6 +50,9 @@ public class LevelTimer : MonoBehaviour
             timerText.color = Color.Lerp(originalColor, warningColor, t);
         }
 
+        // ============================
+        // 🔥 TIEMPO AGOTADO
+        // ============================
         if (currentTime <= 0)
         {
             currentTime = 0;
@@ -77,16 +85,12 @@ public class LevelTimer : MonoBehaviour
         SceneManager.LoadScene(scene.buildIndex);
     }
 
-    // ------------------------------------
-    // MÉTODOS NUEVOS PARA GUARDAR TIEMPO
-    // ------------------------------------
+    // ======================================================
+    // 🔥 MÉTODO CLAVE → TIEMPO USADO POR EL JUGADOR
+    // ======================================================
     public float GetElapsedTime()
     {
+        // Tiempo completado = tiempo inicial - tiempo restante
         return totalTime - currentTime;
-    }
-
-    public float GetRemainingTime()
-    {
-        return currentTime;
     }
 }

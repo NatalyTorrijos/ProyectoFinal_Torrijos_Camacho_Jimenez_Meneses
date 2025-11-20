@@ -6,7 +6,7 @@ public class LeverWithAnimation : MonoBehaviour
     public bool showInstructionOneTime = true;
     public Animator leverAnimator;         // Animator del palo de la palanca
     public string triggerName = "Levantar"; // Nombre del trigger de animación
-
+    public AudioClip collectSound;
     private bool playerInRange = false;
     private Renderer rend;
 
@@ -27,9 +27,10 @@ public class LeverWithAnimation : MonoBehaviour
                 return;
             }
 
-            // Activar la rampa
+            
             if (rampa != null)
-                rampa.SetActive(true);
+            AudioSource.PlayClipAtPoint(collectSound, transform.position);
+            rampa.SetActive(true);
 
             
             if (leverAnimator != null)
