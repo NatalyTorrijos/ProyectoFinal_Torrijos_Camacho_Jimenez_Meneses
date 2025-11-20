@@ -1,27 +1,31 @@
 using UnityEngine;
+/// <summary>
+/// Controla el movimiento oscilante de una plataforma mediante una función seno.
+/// La plataforma se desplaza en una dirección específica con una distancia y velocidad definidas.
+/// También dibuja guías visuales en la escena para mostrar su trayectoria.
+/// </summary>
 
 public class PlatformMovement : MonoBehaviour
 {
     [Header("Configuración de movimiento")]
-    public Vector3 direction = Vector3.up;   // Dirección del movimiento (up, right, forward...)
-    public float distance = 2f;              // Cuánto se moverá desde su punto inicial
-    public float speed = 2f;                 // Velocidad del movimiento
+    public Vector3 direction = Vector3.up;   
+    public float distance = 2f;              
+    public float speed = 2f;                
 
     private Vector3 startPos;
 
     void Start()
     {
-        startPos = transform.position; // guarda posición original
+        startPos = transform.position; 
     }
 
     void Update()
     {
-        // Movimiento tipo ping-pong (ida y vuelta)
+        
         float offset = Mathf.Sin(Time.time * speed) * distance;
         transform.position = startPos + direction.normalized * offset;
     }
 
-    // Dibuja en el editor una guía visual del movimiento
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;

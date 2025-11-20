@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Gestiona el comportamiento de escalada en escaleras.
+/// Detecta cuándo el jugador entra o sale del área, activa o desactiva
+/// el modo de escalada, controla la animación correspondiente y mueve
+/// al jugador verticalmente según la entrada del teclado.
+/// </summary>
+
 public class LadderClimb : MonoBehaviour
 {
     public float climbSpeed = 4f;
@@ -11,6 +18,12 @@ public class LadderClimb : MonoBehaviour
     private CharacterController controller;
     private PlayerMovement playerMovement;
     private Animator anim;
+
+    /// <summary>
+    /// Detecta cuando el jugador entra en el área de la escalera.
+    /// Obtiene las referencias necesarias, muestra la instrucción
+    /// una sola vez y habilita la posibilidad de escalar.
+    /// </summary>
 
     void OnTriggerEnter(Collider other)
     {
@@ -34,6 +47,11 @@ public class LadderClimb : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// Detecta cuando el jugador sale del área de la escalera.
+    /// Desactiva el modo de escalada, devuelve el control normal
+    /// del movimiento y restablece las animaciones.
+    /// </summary>
 
     void OnTriggerExit(Collider other)
     {
@@ -57,6 +75,11 @@ public class LadderClimb : MonoBehaviour
             Debug.Log("Salió del trigger. Escalar OFF");
         }
     }
+    /// <summary>
+    /// Escucha la tecla E para activar/desactivar el modo de escalada,
+    /// controla el movimiento vertical del jugador mientras escala
+    /// y actualiza los parámetros de animación correspondientes.
+    /// </summary>
 
     void Update()
     {

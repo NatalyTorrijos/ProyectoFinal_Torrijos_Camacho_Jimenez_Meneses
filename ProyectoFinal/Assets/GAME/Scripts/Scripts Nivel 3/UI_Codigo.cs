@@ -2,6 +2,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+/// <summary>
+/// Gestiona la interfaz de ingreso de código del jugador.
+/// Permite mostrar y ocultar el panel, deshabilitar temporalmente el movimiento y la cámara,
+/// validar el código ingresado y, si es correcto, cargar la siguiente escena.
+/// </summary>
 
 public class UI_Codigo : MonoBehaviour
 {
@@ -32,10 +37,11 @@ public class UI_Codigo : MonoBehaviour
         panelCodigo.SetActive(false);
         textoError.text = "";
     }
+    /// <summary>
+    /// Muestra el panel de código, desactiva el movimiento y la cámara del jugador,
+    /// desbloquea el cursor y limpia los campos de texto.
+    /// </summary>
 
-    // -----------------------------
-    //   MOSTRAR PANEL DE CÓDIGO
-    // -----------------------------
     public void MostrarPanel()
     {
         panelCodigo.SetActive(true);
@@ -49,10 +55,11 @@ public class UI_Codigo : MonoBehaviour
         campoCodigo.text = "";
         textoError.text = "";
     }
+    /// <summary>
+    /// Oculta el panel de código, reactiva el movimiento y la cámara del jugador,
+    /// bloquea el cursor y lo oculta.
+    /// </summary>
 
-    // -----------------------------
-    //   OCULTAR PANEL
-    // -----------------------------
     public void OcultarPanel()
     {
         panelCodigo.SetActive(false);
@@ -64,9 +71,12 @@ public class UI_Codigo : MonoBehaviour
         Cursor.visible = false;
     }
 
-    // -----------------------------
-    //   VALIDAR CÓDIGO
-    // -----------------------------
+    /// <summary>
+    /// Compara el texto ingresado con el código correcto.
+    /// Si es correcto, muestra mensaje de éxito y carga la siguiente escena;
+    /// si no, muestra mensaje de error.
+    /// </summary>
+
     public void ValidarCodigo()
     {
         if (campoCodigo.text == codigoCorrecto)
@@ -79,10 +89,11 @@ public class UI_Codigo : MonoBehaviour
             textoError.text = "Código incorrecto";
         }
     }
+    /// <summary>
+    /// Carga la siguiente escena si está asignada en el inspector,
+    /// o muestra una advertencia si no se ha definido.
+    /// </summary>
 
-    // -----------------------------
-    //   PASAR AL SIGUIENTE NIVEL
-    // -----------------------------
     private void PasarSiguienteNivel()
     {
         if (!string.IsNullOrEmpty(nombreSiguienteEscena))
