@@ -3,23 +3,17 @@
 public class BossDamageZone : MonoBehaviour
 {
     public int damageToPlayer = 1;
-    // cuanto daño hace el boss al jugador
-
     public float damageCooldown = 0.7f;
-    // tiempo entre daños repetidos
 
     bool canDamage = true;
-    // para evitar daño constante cada frame :)
 
     private void OnTriggerEnter(Collider other)
     {
-        // si entra en contacto, intenta hacer daño
         TryDamage(other);
     }
 
     private void OnTriggerStay(Collider other)
     {
-        // mantiene el daño si sigue dentro :p
         TryDamage(other);
     }
 
@@ -27,17 +21,13 @@ public class BossDamageZone : MonoBehaviour
     {
         if (!canDamage) return;
 
-        // verifica que el objeto sea el jugador
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             HealthPlayer player = other.GetComponent<HealthPlayer>();
 
             if (player != null)
             {
-                // aplica daño
                 player.TakeDamage(damageToPlayer);
-
-                // inicia cooldown del daño
                 StartCoroutine(DamageDelay());
             }
         }
@@ -45,7 +35,6 @@ public class BossDamageZone : MonoBehaviour
 
     System.Collections.IEnumerator DamageDelay()
     {
-        // pausa entre daños
         canDamage = false;
         yield return new WaitForSeconds(damageCooldown);
         canDamage = true;

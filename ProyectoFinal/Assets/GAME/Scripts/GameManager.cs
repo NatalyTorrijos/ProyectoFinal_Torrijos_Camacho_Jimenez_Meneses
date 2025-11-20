@@ -6,15 +6,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    // ---- LISTA DE PRISMAS RECOGIDOS EN NIVEL 3 ----
+    // ---- DATOS DE PRISMAS NIVEL 3 ----
     public List<string> collectedPrisms = new List<string>();
     public int totalPrisms = 5;
 
-    // ---- CLASE PARA GUARDAR TIEMPOS ----
+    // ---- DATOS DE TIEMPOS ----
     [System.Serializable]
     public class LevelTimeData
     {
-        // Diccionario con nombreDelNivel : tiempo
         public Dictionary<string, float> levelTimes = new Dictionary<string, float>();
     }
 
@@ -23,15 +22,12 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        // Singleton
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // Ruta donde se guarda el archivo JSON
             savePath = Application.persistentDataPath + "/level_times.json";
-
             LoadTimes();
         }
         else
@@ -40,7 +36,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Guarda el tiempo de un nivel
+    // -------------------------------
+    // 🔥 GUARDAR TIEMPO DE NIVEL
+    // -------------------------------
     public void SaveLevelTime(string levelName, float time)
     {
         timeData.levelTimes[levelName] = time;
@@ -51,7 +49,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("TIEMPO GUARDADO (" + levelName + ") = " + time + " segundos");
     }
 
-    // Carga los tiempos desde el JSON
+    // -------------------------------
+    // 🔥 CARGAR TIEMPOS
+    // -------------------------------
     private void LoadTimes()
     {
         if (File.Exists(savePath))
@@ -66,7 +66,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Devuelve el tiempo guardado de un nivel
+    // -------------------------------
+    // 🔥 OBTENER TIEMPO DE NIVEL
+    // -------------------------------
     public float GetLevelTime(string levelName)
     {
         if (timeData.levelTimes.ContainsKey(levelName))
@@ -75,14 +77,15 @@ public class GameManager : MonoBehaviour
         return -1f;
     }
 
-    // Guarda un prisma recogido
+    // -------------------------------
+    // 🔥 MANEJO DE PRISMAS (NIVEL 3)
+    // -------------------------------
     public void AddPrism(string id)
     {
         collectedPrisms.Add(id);
         Debug.Log("Prisma recogido: " + id);
     }
 
-    // Devuelve cuántos prismas se han recogido
     public int GetCollectedCount()
     {
         return collectedPrisms.Count;

@@ -3,22 +3,22 @@
 public class PlayerPunchHitbox : MonoBehaviour
 {
     [Header("CONFIG")]
-    public float radius = 0.6f;          // Tamaño del área del golpe
-    public int damage = 1;               // Daño que causa el golpe
-    public LayerMask enemyLayer;         // Layer que identifica a los enemigos
+    public float radius = 0.6f;          // Radio del golpe
+    public int damage = 1;               // Daño del golpe
+    public LayerMask enemyLayer;         // Layer de enemigos
 
     [Header("REFERENCES")]
-    public PlayerMovement player;        // Referencia al script del jugador
+    public PlayerMovement player;        // Referencia al Player
 
     private void OnTriggerEnter(Collider other)
     {
-        // ❌ Si el Player no está golpeando → cancelar
+        // Si el player no está golpeando, cancelar
         if (player == null || !player.isPunching) return;
 
-        // ❌ Si el objeto NO pertenece al enemyLayer → cancelar
+        // Si no está en el layer de enemigos, cancelar
         if (((1 << other.gameObject.layer) & enemyLayer.value) == 0) return;
 
-        // ✔ Intentar obtener el script Enemigo
+        // Intentar obtener componente Enemy
         Enemigo enemy = other.GetComponent<Enemigo>();
         if (enemy != null)
         {
@@ -27,7 +27,7 @@ public class PlayerPunchHitbox : MonoBehaviour
         }
     }
 
-    // Dibuja en la escena el área del golpe
+    // ✔ Esto dibuja el área del golpe para debug
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
