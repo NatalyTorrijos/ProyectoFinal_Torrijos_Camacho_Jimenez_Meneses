@@ -1,18 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour
 {
-    [Header("Paneles del menú")]
     public GameObject mainMenuPanel;
     public GameObject levelSelectPanel;
     public GameObject infoPanel;
     public GameObject creditsPanel;
 
-    // ===========================
-    // MENÚ PRINCIPAL
-    // ===========================
-
+    // Cargar nivel 1 desde PLAY
     public void PlayGame()
     {
         SceneManager.LoadScene("NIVEL 1");
@@ -24,10 +21,7 @@ public class MainMenuUI : MonoBehaviour
         Debug.Log("Salir del juego");
     }
 
-    // ===========================
-    // SUB-MENÚ DE NIVELES
-    // ===========================
-
+    // Abrir submenú de niveles
     public void OpenLevelSelect()
     {
         mainMenuPanel.SetActive(false);
@@ -40,10 +34,7 @@ public class MainMenuUI : MonoBehaviour
         mainMenuPanel.SetActive(true);
     }
 
-    // ===========================
-    // PANEL DE INFORMACIÓN / HISTORIA
-    // ===========================
-
+    // Abrir panel de historia
     public void OpenInfoPanel()
     {
         mainMenuPanel.SetActive(false);
@@ -56,10 +47,7 @@ public class MainMenuUI : MonoBehaviour
         mainMenuPanel.SetActive(true);
     }
 
-    // ===========================
-    // PANEL DE CRÉDITOS
-    // ===========================
-
+    // Abrir créditos
     public void OpenCreditsPanel()
     {
         mainMenuPanel.SetActive(false);
@@ -72,10 +60,7 @@ public class MainMenuUI : MonoBehaviour
         mainMenuPanel.SetActive(true);
     }
 
-    // ===========================
-    // CARGA DE NIVELES (para Level Select)
-    // ===========================
-
+    // Cargar niveles desde Submenú
     public void LoadLevel(string sceneName)
     {
         SceneManager.LoadScene(sceneName);

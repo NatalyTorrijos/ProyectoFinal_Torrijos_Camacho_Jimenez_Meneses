@@ -56,7 +56,7 @@
 //    //        {
 //    //            bossHP.TakeDamage(attackDamage);
 
-//    //            // 🔊 sonido de golpe si pega al boss
+//    //           
 //    //            if (hitBossSound != null)
 //    //                audioSource.PlayOneShot(hitBossSound);
 

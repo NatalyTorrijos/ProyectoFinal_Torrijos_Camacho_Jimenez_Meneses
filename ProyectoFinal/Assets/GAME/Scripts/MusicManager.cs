@@ -5,24 +5,22 @@ public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance;
 
-    [Header("Audio Source principal")]
-    public AudioSource audioSource;
+    public AudioSource audioSource; // Fuente principal de música
 
-    [Header("Música de la escena")]
-    public AudioClip normalMusic;
-    public AudioClip bossMusic;
+    public AudioClip normalMusic;   // Música normal
+    public AudioClip bossMusic;     // Música del boss
 
-    [Header("Opciones de transición")]
-    public float fadeDuration = 1.5f; 
+    public float fadeDuration = 1.5f;
 
     private bool isBossMusic = false;
 
     private void Awake()
     {
+        // Singleton
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); 
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -36,9 +34,11 @@ public class MusicManager : MonoBehaviour
         PlayMusic(normalMusic);
     }
 
+    // Cambia la música con fundido
     public void PlayMusic(AudioClip newClip)
     {
         if (audioSource.clip == newClip) return;
+
         StopAllCoroutines();
         StartCoroutine(FadeMusic(newClip));
     }
@@ -46,6 +46,8 @@ public class MusicManager : MonoBehaviour
     private IEnumerator FadeMusic(AudioClip newClip)
     {
         float startVolume = audioSource.volume;
+
+        // Fade out
         for (float t = 0; t < fadeDuration; t += Time.deltaTime)
         {
             audioSource.volume = Mathf.Lerp(startVolume, 0, t / fadeDuration);
@@ -56,6 +58,7 @@ public class MusicManager : MonoBehaviour
         audioSource.clip = newClip;
         audioSource.Play();
 
+        // Fade in
         for (float t = 0; t < fadeDuration; t += Time.deltaTime)
         {
             audioSource.volume = Mathf.Lerp(0, startVolume, t / fadeDuration);
@@ -69,16 +72,19 @@ public class MusicManager : MonoBehaviour
     {
         if (!isBossMusic)
             PlayMusic(normalMusic);
+
         isBossMusic = false;
     }
 
     public void PlayBossMusic()
     {
         if (isBossMusic) return;
+
         PlayMusic(bossMusic);
         isBossMusic = true;
     }
 
+    // Detectar entrada al área del boss
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -87,6 +93,7 @@ public class MusicManager : MonoBehaviour
         }
     }
 
+    // Detectar salida
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
