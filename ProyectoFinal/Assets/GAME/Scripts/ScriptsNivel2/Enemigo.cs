@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+/// <summary>
+/// Aqui esta toda la logica del enemigo del nivel2, su vida, su ataque las animaciones, el perseguir al player cuando esta en un rango determinado
+/// </summary>
 
 public class Enemigo : MonoBehaviour
 {
-    [Header("Enemy Settings")]
+    [Header("Config enemigo")]
     public int maxHealth = 3;
     public float detectionRange = 8f;
     public float speed = 2f;
 
-    [Header("Attack")]
+    [Header("Ataque")]
     public float attackCooldown = 1f;
     public GameObject attackHitbox;
-    public float hitboxActiveTime = 0.3f;  // tiempo que la hitbox estará activa
+    public float hitboxActiveTime = 0.2f;  
     public float damage = 1f;
 
     private int currentHealth;
@@ -26,7 +29,7 @@ public class Enemigo : MonoBehaviour
         anim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        // Asegurar que la hitbox esté apagada
+        //-------------------------------------------Hitbox Apagada
         if (attackHitbox != null)
             attackHitbox.SetActive(false);
     }
@@ -37,7 +40,7 @@ public class Enemigo : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, player.position);
 
-        // Movimiento y persecución
+        //---------------------------------------------------------------persigue al player si esta en el rango de deteccion
         if (distance < detectionRange && distance > 1.5f)
         {
             anim.SetFloat("Speed", 1f);
@@ -55,7 +58,7 @@ public class Enemigo : MonoBehaviour
             anim.SetFloat("Speed", 0f);
         }
 
-        // Si está cerca, ejecutar ataque
+        // -------------------------------si esta lo suficientemente cerca del player lo ataca
         if (distance <= 1.5f)
             TryAttack();
     }
@@ -78,7 +81,7 @@ public class Enemigo : MonoBehaviour
         attackHitbox.SetActive(false);
     }
 
-    // Daño al enemigo
+    // ----------------Aqui se evalua lo que es la animacion de dead y hit, yaque al pegar el player se analiza si aun tiene vidas el enemigo, si no muere.
     public void TakeDamage(int amount)
     {
         if (isDead) return;

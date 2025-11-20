@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+/// <summary>
+/// Aqui se hace la logica del portal, ya que no con solo recoger los objetos se activa, evalua si el player ya hablo por segunda vez, una vez se evalue que hablo por segunda vez se activa el portal para pasar al NIvel3.
+/// </summary>
 
 public class PortalActivatorS2 : MonoBehaviour
 {
@@ -17,7 +20,7 @@ public class PortalActivatorS2 : MonoBehaviour
     }
 
     void Update()
-    {
+    {            //-------------------Aqui se evalua cuando el player interactua con merlin por segunda vvez y se activa el portal.
         if (merlin == null) return;
 
         if (merlin.PanelMerlin2.activeSelf)

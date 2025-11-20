@@ -9,6 +9,7 @@ TagManager:
   - Enemy2
   - CubosMinijuegoNat
   - Suelo
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - UI
   - Cubos
   - SueloNivel3
-  - 
+  - Enemy
   - 
   - 
   - 

@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+/// <summary>
+/// Aqui se hace la unica interaccion que tiene el player al iniciar el nivel2 con Paquito, abre el unico panel despues de darle a la e.
+/// </summary>
 
 public class NpcSpeak_Paquito : MonoBehaviour
 {
@@ -16,7 +19,7 @@ public class NpcSpeak_Paquito : MonoBehaviour
 
     void Update()
     {
-        // Mostrar panel Press E cuando el jugador esté cerca y no esté ya abierto el diálogo
+        
         if (playerInRange && !PanelPaquito.activeSelf)
             Panel_PressE.SetActive(true);
         else
@@ -30,7 +33,7 @@ public class NpcSpeak_Paquito : MonoBehaviour
         }
     }
 
-    // Este método se llama al cerrar el panel (usado por botón cerrar)
+    
     public void CerrarPanel()
     {
         PanelPaquito.SetActive(false);
