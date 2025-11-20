@@ -1,4 +1,3 @@
-// bossdeathui.cs
 using UnityEngine;
 
 public class BossDeathUI : MonoBehaviour

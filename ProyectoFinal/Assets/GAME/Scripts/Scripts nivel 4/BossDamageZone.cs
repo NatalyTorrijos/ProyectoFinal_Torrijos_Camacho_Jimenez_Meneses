@@ -1,5 +1,4 @@
-﻿// bossdamagezone.cs
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BossDamageZone : MonoBehaviour
 {
