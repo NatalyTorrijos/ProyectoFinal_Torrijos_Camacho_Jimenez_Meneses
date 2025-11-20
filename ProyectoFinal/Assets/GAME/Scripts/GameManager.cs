@@ -6,19 +6,21 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    // ---- DATOS DE PRISMAS NIVEL 3 ----
+    //Lista prisms escena 3
     public List<string> collectedPrisms = new List<string>();
     public int totalPrisms = 5;
 
-    // ---- DATOS DE TIEMPOS ----
-    [System.Serializable]
-    public class LevelTimeData
-    {
-        public Dictionary<string, float> levelTimes = new Dictionary<string, float>();
-    }
+    // 🔥 NUEVO: Tiempo final del nivel
+    public float lastLevelTime = 0;
 
-    private LevelTimeData timeData = new LevelTimeData();
+    // 🔥 Ruta del archivo JSON
     private string savePath;
+
+    [System.Serializable]
+    public class SaveData
+    {
+        public float lastLevelTime;
+    }
 
     void Awake()
     {
@@ -26,9 +28,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
-            savePath = Application.persistentDataPath + "/level_times.json";
-            LoadTimes();
+            savePath = Application.persistentDataPath + "/saveData.json";
         }
         else
         {
@@ -36,50 +36,43 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // -------------------------------
-    // 🔥 GUARDAR TIEMPO DE NIVEL
-    // -------------------------------
-    public void SaveLevelTime(string levelName, float time)
+    // ================================
+    // 🔥 GUARDAR TIEMPO EN JSON
+    // ================================
+    public void SaveLevelTime(float time)
     {
-        timeData.levelTimes[levelName] = time;
+        lastLevelTime = time;
 
-        string json = JsonUtility.ToJson(timeData, true);
+        SaveData data = new SaveData();
+        data.lastLevelTime = time;
+
+        string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(savePath, json);
 
-        Debug.Log("TIEMPO GUARDADO (" + levelName + ") = " + time + " segundos");
+        Debug.Log("⏱ Tiempo guardado en JSON: " + time + " segundos");
+        Debug.Log("Archivo guardado en: " + savePath);
     }
 
-    // -------------------------------
-    // 🔥 CARGAR TIEMPOS
-    // -------------------------------
-    private void LoadTimes()
+    // ================================
+    // 🔥 CARGAR JSON
+    // ================================
+    public void LoadData()
     {
-        if (File.Exists(savePath))
+        if (!File.Exists(savePath))
         {
-            string json = File.ReadAllText(savePath);
-            timeData = JsonUtility.FromJson<LevelTimeData>(json);
-            Debug.Log("Tiempos cargados correctamente.");
+            Debug.LogWarning("No hay archivo JSON todavía.");
+            return;
         }
-        else
-        {
-            timeData = new LevelTimeData();
-        }
+
+        string json = File.ReadAllText(savePath);
+        SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+        lastLevelTime = data.lastLevelTime;
+
+        Debug.Log("⏱ Tiempo cargado desde JSON: " + lastLevelTime);
     }
 
-    // -------------------------------
-    // 🔥 OBTENER TIEMPO DE NIVEL
-    // -------------------------------
-    public float GetLevelTime(string levelName)
-    {
-        if (timeData.levelTimes.ContainsKey(levelName))
-            return timeData.levelTimes[levelName];
-
-        return -1f;
-    }
-
-    // -------------------------------
-    // 🔥 MANEJO DE PRISMAS (NIVEL 3)
-    // -------------------------------
+    // Nivel 3 prisms (YA LO TENÍAS)
     public void AddPrism(string id)
     {
         collectedPrisms.Add(id);
