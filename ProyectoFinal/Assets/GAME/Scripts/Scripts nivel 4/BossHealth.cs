@@ -9,38 +9,39 @@ public class BossHealth : MonoBehaviour
     public float currentHealth;
 
     [Header("UI")]
-    public Image healthFill;
-    public CanvasGroup uiGroup;
+    public Image healthFill;           // imagen que representa la barra de vida
+    public CanvasGroup uiGroup;        // grupo para hacer fade de la ui
     public TextMeshProUGUI bossNameText;
 
     [Header("Detection")]
-    public Transform player;
-    public float detectDistance = 15f;
+    public Transform player;           // referencia al jugador para mostrar ui
+    public float detectDistance = 15f; // distancia para mostrar la ui
 
     [Header("Final Screen")]
-    public CanvasGroup finalPanel;   // 🔥 Panel final que aparecerá al morir el boss
+    public CanvasGroup finalPanel;     // panel final que aparece al morir el boss
 
-    float nameTimer = 0f;
-    bool uiVisible = false;
-    bool nameShownOnce = false;
+    float nameTimer = 0f;             // tiempo restante para mostrar el nombre
+    bool uiVisible = false;           // si la ui esta visible
+    bool nameShownOnce = false;       // para mostrar el nombre solo la primera vez
 
     Animator anim;
     bool isDead = false;
 
     Collider bossCollider;
-    MonoBehaviour bossControllerScript;
+    MonoBehaviour bossControllerScript; // referencia al script de control del boss
 
     void Start()
     {
+        // obtener componentes necesarios
         anim = GetComponentInChildren<Animator>();
         bossCollider = GetComponent<Collider>();
 
-        // Busca automáticamente el BossController (tu AI)
+        // buscar automaticamente el script de la ia del boss
         bossControllerScript = GetComponent<BossController>();
 
         currentHealth = maxHealth;
 
-        // UI inicial
+        // iniciar ui oculta
         uiGroup.alpha = 0f;
         uiGroup.gameObject.SetActive(false);
         bossNameText.gameObject.SetActive(false);
@@ -51,27 +52,26 @@ public class BossHealth : MonoBehaviour
             finalPanel.gameObject.SetActive(false);
         }
 
-        UpdateBar();
+        UpdateBar(); // actualizar barra inicial
     }
 
     void Update()
     {
+        // si no hay jugador o ya murio, salir
         if (player == null || isDead) return;
 
         float dist = Vector3.Distance(transform.position, player.position);
 
+        // mostrar u ocultar ui segun distancia
         if (dist <= detectDistance)
             ShowUI();
         else
             HideUI();
 
-        HandleNameTimer();
+        HandleNameTimer(); // gestionar el temporizador del nombre
     }
 
-    // ============================================================
-    // UI SHOW / HIDE
-    // ============================================================
-
+    // mostrar la ui y empezar fade in
     void ShowUI()
     {
         if (uiVisible) return;
@@ -80,7 +80,7 @@ public class BossHealth : MonoBehaviour
         uiGroup.gameObject.SetActive(true);
         StartFadeIn();
 
-        // Mostrar nombre del boss una sola vez cuando empieza la pelea
+        // mostrar nombre una sola vez al iniciar la pelea
         if (!nameShownOnce)
         {
             nameShownOnce = true;
@@ -89,6 +89,7 @@ public class BossHealth : MonoBehaviour
         }
     }
 
+    // iniciar fade out de la ui
     void HideUI()
     {
         if (!uiVisible) return;
@@ -97,10 +98,10 @@ public class BossHealth : MonoBehaviour
         StartFadeOut();
     }
 
-    // Solo contar el tiempo mientras la UI está activa
+    // reducir el temporizador del nombre mientras la ui esta activa
     void HandleNameTimer()
     {
-        if (!uiVisible) return;    // 🔥 FIX: evita desaparecerlo antes de tiempo
+        if (!uiVisible) return;
         if (nameTimer <= 0) return;
 
         nameTimer -= Time.deltaTime;
@@ -109,10 +110,7 @@ public class BossHealth : MonoBehaviour
             bossNameText.gameObject.SetActive(false);
     }
 
-    // ============================================================
-    // DAMAGE
-    // ============================================================
-
+    // aplicar daño al boss
     public void TakeDamage(float amount)
     {
         if (isDead) return;
@@ -120,24 +118,23 @@ public class BossHealth : MonoBehaviour
         currentHealth -= amount;
         if (currentHealth < 0) currentHealth = 0;
 
-        UpdateBar();
+        UpdateBar(); // actualizar barra
+
         if (anim != null)
-            anim.SetTrigger("Hit");
+            anim.SetTrigger("Hit"); // reproducir anim hit
 
         if (currentHealth <= 0)
             Die();
     }
 
+    // actualizar la imagen de la barra de vida
     void UpdateBar()
     {
         if (healthFill != null)
             healthFill.fillAmount = currentHealth / maxHealth;
     }
 
-    // ============================================================
-    // DEATH
-    // ============================================================
-
+    // manejo de la muerte del boss
     void Die()
     {
         if (isDead) return;
@@ -147,26 +144,24 @@ public class BossHealth : MonoBehaviour
         if (anim != null)
             anim.SetTrigger("Die");
 
+        // desactivar el script de IA para que deje de moverse
         if (bossControllerScript != null)
             bossControllerScript.enabled = false;
 
+        // asegurar collider activo/desactivado segun lo que se espere
         if (bossCollider != null)
             bossCollider.enabled = true;
 
-        // Apagar nombre definitivamente
+        // ocultar nombre y detener timer
         bossNameText.gameObject.SetActive(false);
         nameTimer = 0f;
 
-        // 🔥 Mostrar pantalla final
+        // mostrar pantalla final con fade
         if (finalPanel != null)
             StartCoroutine(FadeFinalPanel());
     }
 
-
-    // ============================================================
-    // UI COROUTINES
-    // ============================================================
-
+    // fade in / fade out de la ui principal
     void StartFadeIn()
     {
         StopAllCoroutines();
@@ -179,6 +174,7 @@ public class BossHealth : MonoBehaviour
         StartCoroutine(FadeUI(1f, 0f, 0.8f));
     }
 
+    // coroutine que hace el fade de la ui
     System.Collections.IEnumerator FadeUI(float from, float to, float duration)
     {
         float t = 0f;
@@ -197,10 +193,7 @@ public class BossHealth : MonoBehaviour
             uiGroup.gameObject.SetActive(false);
     }
 
-    // ============================================================
-    // FINAL SCREEN FADE
-    // ============================================================
-
+    // coroutine que muestra la pantalla final con fade cuando el boss muere
     System.Collections.IEnumerator FadeFinalPanel()
     {
         finalPanel.gameObject.SetActive(true);
