@@ -5206,8 +5206,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 500, y: 307.25333}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 552, y: 306}
+  m_SizeDelta: {x: 140.0297, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &65376210
 MonoBehaviour:
@@ -5231,8 +5231,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\xBFGANASTE?"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c5421d755213ec9489b14c2688ce2231, type: 2}
+  m_sharedMaterial: {fileID: -8473073101751084380, guid: c5421d755213ec9489b14c2688ce2231, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5294,7 +5294,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -44.87793, y: 0, z: 26.627892, w: 0}
+  m_margin: {x: -44.87793, y: 0, z: 57.836914, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -15216,7 +15216,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: HAS PERDIDO
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c5421d755213ec9489b14c2688ce2231, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -15282,7 +15282,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 2.431488, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &211525881
@@ -34454,6 +34454,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossDeathUI
   panel: {fileID: 1847027338}
   bossHealth: {fileID: 2061702399}
+  panelsToHide: []
 --- !u!4 &500208987 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 465224, guid: 818e532131a9a4d9ab96846c72c25182, type: 3}
@@ -38781,9 +38782,9 @@ RectTransform:
   m_Father: {fileID: 4948952}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 190.99977, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMax: {x: 0.5, y: 0.59000003}
+  m_AnchoredPosition: {x: 124, y: 64}
+  m_SizeDelta: {x: 220.974, y: 41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &599086144
 MonoBehaviour:
@@ -38805,10 +38806,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: BOSS
+  m_text: "Tu eres\n tu propio enemigo"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c5421d755213ec9489b14c2688ce2231, type: 2}
+  m_sharedMaterial: {fileID: -8473073101751084380, guid: c5421d755213ec9489b14c2688ce2231, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -38839,7 +38840,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -38870,7 +38871,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 94.99834, w: 0}
+  m_margin: {x: -64.91939, y: 0, z: -0.88259506, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -103765,7 +103766,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6920110212491489155, guid: 61cc8f353a8aa8245a39b30f44d79768, type: 3}
       propertyPath: enemyLayer.m_Bits
-      value: 264
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 7945578590868757036, guid: 61cc8f353a8aa8245a39b30f44d79768, type: 3}
       propertyPath: m_Name
@@ -144074,6 +144075,7 @@ MonoBehaviour:
   attackSounds: []
   hitSound: {fileID: 8300000, guid: 02b5f9f8d8d7ffe40b339a91dd2e9fde, type: 3}
   deathSound: {fileID: 8300000, guid: 1389576d5a0414645bc3aa47a76ebbd8, type: 3}
+  bossMusic: {fileID: 8300000, guid: b034d8068b8e60042a6baac95a6de202, type: 3}
 --- !u!114 &2061702399
 MonoBehaviour:
   m_ObjectHideFlags: 0

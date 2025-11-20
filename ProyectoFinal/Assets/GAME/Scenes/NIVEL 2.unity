@@ -124963,7 +124963,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8760581627529832564, guid: 810da9da751e0254fa73557ed2d47875, type: 3}
       propertyPath: moveSpeed
-      value: 8
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8760581627529832564, guid: 810da9da751e0254fa73557ed2d47875, type: 3}
       propertyPath: punchPoint
@@ -124979,7 +124979,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8760581627529832564, guid: 810da9da751e0254fa73557ed2d47875, type: 3}
       propertyPath: enemyLayer.m_Bits
-      value: 16384
+      value: 256
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
